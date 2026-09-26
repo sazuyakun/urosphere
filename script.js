@@ -19,6 +19,20 @@ function basicSetup() {
   return { scene, camera, renderer };
 }
 
+function generateFloor() {
+  const SIZE = 50;
+  const geometry = new THREE.PlaneGeometry(SIZE, SIZE);
+
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x808080,
+  });
+
+  const floor = new THREE.Mesh(geometry, material);
+
+  floor.rotation.x = -Math.PI / 2;
+  return floor;
+}
+
 const { scene, camera, renderer } = basicSetup();
 
 const loader = new GLTFLoader();
@@ -27,23 +41,24 @@ function loadModel(gltf) {
   const gltfJson = gltf.parser.json;
   console.log(gltfJson);
   const model = gltf.scene;
+  model.add(camera);
   scene.add(model);
   document.addEventListener("keydown", function (event) {
     switch (event.key) {
-      case "w": // W
-        camera.position.z -= 0.1;
+      case "w":
+      case "ArrowUp":
         model.position.z -= 0.1;
         break;
-      case "a": // A
-        camera.position.x -= 0.1;
+      case "a":
+      case "ArrowLeft":
         model.position.x -= 0.1;
         break;
-      case "s": // S
-        camera.position.z += 0.1;
+      case "s":
+      case "ArrowDown":
         model.position.z += 0.1;
         break;
-      case "d": // D
-        camera.position.x += 0.1;
+      case "d":
+      case "ArrowRight":
         model.position.x += 0.1;
         break;
     }
@@ -61,6 +76,7 @@ loader.load(
 
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
+scene.add(generateFloor());
 
 renderer.setAnimationLoop(() => {
   renderer.render(scene, camera);
