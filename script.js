@@ -2,8 +2,9 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
 
 const unitVector = new THREE.Vector3();
+const timer = new THREE.Timer();
 
-let model, actions;
+let model, actions, mixer;
 
 // Function declaration
 function basicSetup() {
@@ -96,13 +97,15 @@ function loadModel(camera) {
 
     const animations = gltf.animations;
 
-    const mixer = new THREE.AnimationMixer(model);
+    mixer = new THREE.AnimationMixer(model);
 
     actions = {
       idle: mixer.clipAction(animations[1]),
       walk: mixer.clipAction(animations[2]),
       sprint: mixer.clipAction(animations[3]),
     };
+
+    actions.idle.play();
   });
 }
 
@@ -117,7 +120,16 @@ scene.add(axesHelper);
 scene.add(generateFloor());
 
 renderer.setAnimationLoop(() => {
+  if (model) {
+    model.position.x += unitVector.x * 0.1;
+    model.position.z += unitVector.z * 0.1;
+  }
+
+  if (mixer) {
+    timer.update();
+    const delta = timer.getDelta();
+    mixer.update(delta);
+  }
+
   renderer.render(scene, camera);
-  model.position.x += unitVector.x * 0.1;
-  model.position.z += unitVector.z * 0.1;
 });
