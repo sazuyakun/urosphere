@@ -104,8 +104,6 @@ function loadModel(camera) {
       walk: mixer.clipAction(animations[2]),
       sprint: mixer.clipAction(animations[3]),
     };
-
-    actions.idle.play();
   });
 }
 
@@ -120,9 +118,19 @@ scene.add(axesHelper);
 scene.add(generateFloor());
 
 renderer.setAnimationLoop(() => {
-  if (model) {
+  if (model && actions) {
+    const isMoving = !(unitVector.x === 0 && unitVector.z === 0);
+
     model.position.x += unitVector.x * 0.1;
     model.position.z += unitVector.z * 0.1;
+
+    if (isMoving) {
+      actions.idle.stop();
+      actions.walk.play();
+    } else {
+      actions.walk.stop();
+      actions.idle.play();
+    }
   }
 
   if (mixer) {
