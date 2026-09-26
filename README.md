@@ -13,3 +13,9 @@ A fun world in three.js to explore with my girlfriend Urvi!
 
 - Then we move to react
 - Then we move to R3F (one at a time baby!)
+
+## Eureka on the movement part:
+
+- Each key press will set the unit vector to 1 or -1 for the direction in an object
+- we will calculate the final direction in a Vector using these keys
+- this way combination of keyboard presses can give intermediate directions

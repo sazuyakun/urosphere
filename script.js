@@ -1,6 +1,11 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
 
+const unitVector = new THREE.Vector3();
+
+let model, actions;
+
+// Function declaration
 function basicSetup() {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
@@ -33,46 +38,79 @@ function generateFloor() {
   return floor;
 }
 
-const { scene, camera, renderer } = basicSetup();
-
-const loader = new GLTFLoader();
-
-function loadModel(gltf) {
-  const gltfJson = gltf.parser.json;
-  console.log(gltfJson);
-  const model = gltf.scene;
-  model.add(camera);
-  scene.add(model);
+function onKeyPress() {
   document.addEventListener("keydown", function (event) {
     switch (event.key) {
       case "w":
       case "ArrowUp":
-        model.position.z -= 0.1;
+        unitVector.z = -1;
         break;
       case "a":
       case "ArrowLeft":
-        model.position.x -= 0.1;
+        unitVector.x = -1;
         break;
       case "s":
       case "ArrowDown":
-        model.position.z += 0.1;
+        unitVector.z = 1;
         break;
       case "d":
       case "ArrowRight":
-        model.position.x += 0.1;
+        unitVector.x = 1;
+        break;
+    }
+  });
+  document.addEventListener("keyup", function (event) {
+    switch (event.key) {
+      case "w":
+      case "ArrowUp":
+        unitVector.z = 0;
+        break;
+      case "a":
+      case "ArrowLeft":
+        unitVector.x = 0;
+        break;
+      case "s":
+      case "ArrowDown":
+        unitVector.z = 0;
+        break;
+      case "d":
+      case "ArrowRight":
+        unitVector.x = 0;
         break;
     }
   });
 }
 
-loader.load(
-  "/character-e.glb",
-  (gltf) => loadModel(gltf),
-  undefined,
-  function (error) {
-    console.error(error);
-  },
-);
+function loadModel(camera) {
+  const FILE_PATH = "/character-e.glb";
+
+  const loader = new GLTFLoader();
+
+  loader.load(FILE_PATH, (gltf) => {
+    const gltfJson = gltf.parser.json;
+    console.log(gltfJson);
+
+    model = gltf.scene;
+    model.add(camera);
+    scene.add(model);
+
+    const animations = gltf.animations;
+
+    const mixer = new THREE.AnimationMixer(model);
+
+    actions = {
+      idle: mixer.clipAction(animations[1]),
+      walk: mixer.clipAction(animations[2]),
+      sprint: mixer.clipAction(animations[3]),
+    };
+  });
+}
+
+// Main implementation
+const { scene, camera, renderer } = basicSetup();
+
+loadModel(camera);
+onKeyPress();
 
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
@@ -80,4 +118,6 @@ scene.add(generateFloor());
 
 renderer.setAnimationLoop(() => {
   renderer.render(scene, camera);
+  model.position.x += unitVector.x * 0.1;
+  model.position.z += unitVector.z * 0.1;
 });
