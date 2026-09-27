@@ -10,6 +10,13 @@ let currentAngle = Math.PI;
 let isSprinting = false;
 let SPEED = 6;
 
+const state = {
+  moving: false,
+  sprinting: false,
+  angle: Math.PI,
+  action: "idle",
+};
+
 // Function declaration
 function basicSetup() {
   const scene = new THREE.Scene();
