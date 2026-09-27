@@ -6,13 +6,13 @@ const timer = new THREE.Timer();
 const cameraOffset = new THREE.Vector3(0, 3, 5);
 const SPEED = 6;
 
-let model, actions, mixer, currentAction;
+let model, actions, mixer;
 
 const state = {
   moving: false,
   sprinting: false,
   angle: Math.PI,
-  action: "idle",
+  action: null,
 };
 
 // Function declaration
@@ -122,23 +122,26 @@ function loadModel(scene) {
   });
 }
 
+function playAction(action) {
+  if (state.action === action) return;
+
+  actions[state.action]?.fadeOut(0.2);
+
+  const nextAction = actions[action];
+
+  state.action = action;
+
+  nextAction.reset();
+  nextAction.fadeIn(0.2);
+  nextAction.play();
+}
+
 // Main implementation
 const { scene, camera, renderer } = basicSetup();
 
 helpers(scene);
 loadModel(scene);
 onKeyPress();
-
-function playAction(action) {
-  if (currentAction === action) return;
-
-  currentAction?.fadeOut(0.2);
-
-  currentAction = action;
-  currentAction.reset();
-  currentAction.fadeIn(0.2);
-  currentAction.play();
-}
 
 renderer.setAnimationLoop(() => {
   timer.update();
@@ -167,12 +170,12 @@ renderer.setAnimationLoop(() => {
 
     if (state.moving) {
       if (state.sprinting) {
-        playAction(actions.sprint);
+        playAction("sprint");
       } else {
-        playAction(actions.walk);
+        playAction("walk");
       }
     } else {
-      playAction(actions.idle);
+      playAction("idle");
     }
 
     camera.position.copy(model.position).add(cameraOffset);
