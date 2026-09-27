@@ -4,11 +4,9 @@ import { GLTFLoader } from "three/examples/jsm/Addons.js";
 const unitVector = new THREE.Vector3();
 const timer = new THREE.Timer();
 const cameraOffset = new THREE.Vector3(0, 3, 5);
+const SPEED = 6;
 
 let model, actions, mixer, currentAction;
-let currentAngle = Math.PI;
-let isSprinting = false;
-let SPEED = 6;
 
 const state = {
   moving: false,
@@ -67,7 +65,7 @@ function onKeyPress() {
         unitVector.x = 1;
         break;
       case "Shift":
-        isSprinting = true;
+        state.sprinting = true;
         break;
     }
   });
@@ -94,7 +92,7 @@ function onKeyPress() {
         unitVector.x = 0;
         break;
       case "Shift":
-        isSprinting = false;
+        state.sprinting = false;
         break;
     }
   });
@@ -150,14 +148,14 @@ renderer.setAnimationLoop(() => {
     const direction = unitVector.clone().normalize();
 
     if (direction.x === 0 && direction.z === 0) {
-      model.rotation.set(0, currentAngle, 0);
+      model.rotation.set(0, state.angle, 0);
     } else {
-      const angle = Math.atan2(direction.x, direction.z);
-      model.rotation.set(0, angle, 0);
-      currentAngle = angle;
+      const newAngle = Math.atan2(direction.x, direction.z);
+      model.rotation.set(0, newAngle, 0);
+      state.angle = newAngle;
     }
 
-    if (isSprinting) {
+    if (state.sprinting) {
       model.position.x += direction.x * 2 * SPEED * delta;
       model.position.z += direction.z * 2 * SPEED * delta;
     } else {
@@ -165,10 +163,10 @@ renderer.setAnimationLoop(() => {
       model.position.z += direction.z * SPEED * delta;
     }
 
-    const isMoving = !(unitVector.x === 0 && unitVector.z === 0);
+    state.moving = !(unitVector.x === 0 && unitVector.z === 0);
 
-    if (isMoving) {
-      if (isSprinting) {
+    if (state.moving) {
+      if (state.sprinting) {
         playAction(actions.sprint);
       } else {
         playAction(actions.walk);
