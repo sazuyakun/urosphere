@@ -3,6 +3,7 @@ import { GLTFLoader } from "three/examples/jsm/Addons.js";
 
 const unitVector = new THREE.Vector3();
 const timer = new THREE.Timer();
+const cameraOffset = new THREE.Vector3(0, 3, 5);
 
 let model, actions, mixer;
 
@@ -92,7 +93,6 @@ function loadModel(camera) {
     console.log(gltfJson);
 
     model = gltf.scene;
-    model.add(camera);
     scene.add(model);
 
     const animations = gltf.animations;
@@ -131,6 +131,8 @@ renderer.setAnimationLoop(() => {
       actions.walk.stop();
       actions.idle.play();
     }
+
+    camera.position.copy(model.position).add(cameraOffset);
   }
 
   if (mixer) {
