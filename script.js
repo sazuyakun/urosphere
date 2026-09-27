@@ -3,7 +3,8 @@ import { GLTFLoader } from "three/examples/jsm/Addons.js";
 
 const timer = new THREE.Timer();
 const CAMERA_OFFSET = new THREE.Vector3(0, 3, 5);
-const SPEED = 6;
+const ROTATION_SPEED = 2;
+const MOVEMENT_SPEED = 6;
 
 let model, actions, mixer;
 
@@ -159,11 +160,11 @@ renderer.setAnimationLoop(() => {
     }
 
     if (state.sprinting) {
-      model.position.x += direction.x * 2 * SPEED * delta;
-      model.position.z += direction.z * 2 * SPEED * delta;
+      model.position.x += direction.x * 2 * MOVEMENT_SPEED * delta;
+      model.position.z += direction.z * 2 * MOVEMENT_SPEED * delta;
     } else {
-      model.position.x += direction.x * SPEED * delta;
-      model.position.z += direction.z * SPEED * delta;
+      model.position.x += direction.x * MOVEMENT_SPEED * delta;
+      model.position.z += direction.z * MOVEMENT_SPEED * delta;
     }
 
     state.moving = !(state.direction.x === 0 && state.direction.z === 0);
