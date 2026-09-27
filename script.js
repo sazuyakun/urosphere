@@ -118,11 +118,15 @@ scene.add(axesHelper);
 scene.add(generateFloor());
 
 renderer.setAnimationLoop(() => {
+  timer.update();
+  const delta = timer.getDelta();
+
   if (model && actions) {
     const isMoving = !(unitVector.x === 0 && unitVector.z === 0);
 
-    model.position.x += unitVector.x * 0.1;
-    model.position.z += unitVector.z * 0.1;
+    const direction = unitVector.clone().normalize();
+    model.position.x += direction.x * delta;
+    model.position.z += direction.z * delta;
 
     if (isMoving) {
       actions.idle.stop();
@@ -136,8 +140,6 @@ renderer.setAnimationLoop(() => {
   }
 
   if (mixer) {
-    timer.update();
-    const delta = timer.getDelta();
     mixer.update(delta);
   }
 
