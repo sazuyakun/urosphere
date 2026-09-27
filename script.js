@@ -1,9 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
 
-const unitVector = new THREE.Vector3();
 const timer = new THREE.Timer();
-const cameraOffset = new THREE.Vector3(0, 3, 5);
+const CAMERA_OFFSET = new THREE.Vector3(0, 3, 5);
 const SPEED = 6;
 
 let model, actions, mixer;
@@ -13,6 +12,7 @@ const state = {
   sprinting: false,
   angle: Math.PI,
   action: null,
+  direction: new THREE.Vector3(),
 };
 
 // Function declaration
@@ -47,22 +47,22 @@ function onKeyPress() {
       case "w":
       case "W":
       case "ArrowUp":
-        unitVector.z = -1;
+        state.direction.z = -1;
         break;
       case "a":
       case "A":
       case "ArrowLeft":
-        unitVector.x = -1;
+        state.direction.x = -1;
         break;
       case "s":
       case "S":
       case "ArrowDown":
-        unitVector.z = 1;
+        state.direction.z = 1;
         break;
       case "d":
       case "D":
       case "ArrowRight":
-        unitVector.x = 1;
+        state.direction.x = 1;
         break;
       case "Shift":
         state.sprinting = true;
@@ -74,22 +74,22 @@ function onKeyPress() {
       case "w":
       case "W":
       case "ArrowUp":
-        unitVector.z = 0;
+        state.direction.z = 0;
         break;
       case "a":
       case "A":
       case "ArrowLeft":
-        unitVector.x = 0;
+        state.direction.x = 0;
         break;
       case "s":
       case "S":
       case "ArrowDown":
-        unitVector.z = 0;
+        state.direction.z = 0;
         break;
       case "d":
       case "D":
       case "ArrowRight":
-        unitVector.x = 0;
+        state.direction.x = 0;
         break;
       case "Shift":
         state.sprinting = false;
@@ -148,7 +148,7 @@ renderer.setAnimationLoop(() => {
   const delta = timer.getDelta();
 
   if (model && actions) {
-    const direction = unitVector.clone().normalize();
+    const direction = state.direction.clone().normalize();
 
     if (direction.x === 0 && direction.z === 0) {
       model.rotation.set(0, state.angle, 0);
@@ -166,7 +166,7 @@ renderer.setAnimationLoop(() => {
       model.position.z += direction.z * SPEED * delta;
     }
 
-    state.moving = !(unitVector.x === 0 && unitVector.z === 0);
+    state.moving = !(state.direction.x === 0 && state.direction.z === 0);
 
     if (state.moving) {
       if (state.sprinting) {
@@ -178,7 +178,7 @@ renderer.setAnimationLoop(() => {
       playAction("idle");
     }
 
-    camera.position.copy(model.position).add(cameraOffset);
+    camera.position.copy(model.position).add(CAMERA_OFFSET);
   }
 
   if (mixer) {
