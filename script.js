@@ -151,13 +151,11 @@ renderer.setAnimationLoop(() => {
   if (model && actions) {
     const direction = state.direction.clone().normalize();
 
-    if (direction.x === 0 && direction.z === 0) {
-      model.rotation.set(0, state.angle, 0);
-    } else {
-      const newAngle = Math.atan2(direction.x, direction.z);
-      model.rotation.set(0, newAngle, 0);
-      state.angle = newAngle;
+    if (direction.x !== 0 || direction.z !== 0) {
+      state.angle = Math.atan2(direction.x, direction.z);
     }
+
+    model.rotation.set(0, state.angle, 0);
 
     if (state.sprinting) {
       model.position.x += direction.x * 2 * MOVEMENT_SPEED * delta;
