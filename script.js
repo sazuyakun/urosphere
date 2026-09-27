@@ -25,7 +25,7 @@ function basicSetup() {
     0.1,
     1000,
   );
-  camera.position.set(0, 3, 5);
+  camera.position.set(CAMERA_OFFSET);
   camera.lookAt(0, 0, 0);
 
   const renderer = new THREE.WebGLRenderer();
