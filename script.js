@@ -6,6 +6,8 @@ const timer = new THREE.Timer();
 const cameraOffset = new THREE.Vector3(0, 3, 5);
 
 let model, actions, mixer, currentAction;
+let isSprinting = false;
+let SPEED = 6;
 
 // Function declaration
 function basicSetup() {
@@ -44,40 +46,55 @@ function onKeyPress() {
   document.addEventListener("keydown", function (event) {
     switch (event.key) {
       case "w":
+      case "W":
       case "ArrowUp":
         unitVector.z = -1;
         break;
       case "a":
+      case "A":
       case "ArrowLeft":
         unitVector.x = -1;
         break;
       case "s":
+      case "S":
       case "ArrowDown":
         unitVector.z = 1;
         break;
       case "d":
+      case "D":
       case "ArrowRight":
         unitVector.x = 1;
+        break;
+      case "Shift":
+        isSprinting = true;
         break;
     }
   });
   document.addEventListener("keyup", function (event) {
+    console.log("KEY RELEASED:", event.key);
     switch (event.key) {
       case "w":
+      case "W":
       case "ArrowUp":
         unitVector.z = 0;
         break;
       case "a":
+      case "A":
       case "ArrowLeft":
         unitVector.x = 0;
         break;
       case "s":
+      case "S":
       case "ArrowDown":
         unitVector.z = 0;
         break;
       case "d":
+      case "D":
       case "ArrowRight":
         unitVector.x = 0;
+        break;
+      case "Shift":
+        isSprinting = false;
         break;
     }
   });
@@ -134,13 +151,22 @@ renderer.setAnimationLoop(() => {
 
   if (model && actions) {
     const direction = unitVector.clone().normalize();
-    model.position.x += direction.x * delta;
-    model.position.z += direction.z * delta;
+    if (isSprinting) {
+      model.position.x += direction.x * 2 * SPEED * delta;
+      model.position.z += direction.z * 2 * SPEED * delta;
+    } else {
+      model.position.x += direction.x * SPEED * delta;
+      model.position.z += direction.z * SPEED * delta;
+    }
 
     const isMoving = !(unitVector.x === 0 && unitVector.z === 0);
 
     if (isMoving) {
-      playAction(actions.walk);
+      if (isSprinting) {
+        playAction(actions.sprint);
+      } else {
+        playAction(actions.walk);
+      }
     } else {
       playAction(actions.idle);
     }
