@@ -6,6 +6,7 @@ const timer = new THREE.Timer();
 const cameraOffset = new THREE.Vector3(0, 3, 5);
 
 let model, actions, mixer, currentAction;
+let currentAngle = Math.PI;
 let isSprinting = false;
 let SPEED = 6;
 
@@ -71,7 +72,6 @@ function onKeyPress() {
     }
   });
   document.addEventListener("keyup", function (event) {
-    console.log("KEY RELEASED:", event.key);
     switch (event.key) {
       case "w":
       case "W":
@@ -100,7 +100,7 @@ function onKeyPress() {
   });
 }
 
-function loadModel(camera) {
+function loadModel(scene) {
   const FILE_PATH = "/character-e.glb";
 
   const loader = new GLTFLoader();
@@ -127,7 +127,7 @@ function loadModel(camera) {
 // Main implementation
 const { scene, camera, renderer } = basicSetup();
 
-loadModel(camera);
+loadModel(scene);
 onKeyPress();
 
 const axesHelper = new THREE.AxesHelper(5);
@@ -151,6 +151,15 @@ renderer.setAnimationLoop(() => {
 
   if (model && actions) {
     const direction = unitVector.clone().normalize();
+
+    if (direction.x === 0 && direction.z === 0) {
+      model.rotation.set(0, currentAngle, 0);
+    } else {
+      const angle = Math.atan2(direction.x, direction.z);
+      model.rotation.set(0, angle, 0);
+      currentAngle = angle;
+    }
+
     if (isSprinting) {
       model.position.x += direction.x * 2 * SPEED * delta;
       model.position.z += direction.z * 2 * SPEED * delta;
