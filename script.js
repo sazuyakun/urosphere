@@ -5,7 +5,7 @@ const unitVector = new THREE.Vector3();
 const timer = new THREE.Timer();
 const cameraOffset = new THREE.Vector3(0, 3, 5);
 
-let model, actions, mixer;
+let model, actions, mixer, currentAction;
 
 // Function declaration
 function basicSetup() {
@@ -117,23 +117,32 @@ const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 scene.add(generateFloor());
 
+function playAction(action) {
+  if (currentAction === action) return;
+
+  currentAction?.fadeOut(0.2);
+
+  currentAction = action;
+  currentAction.reset();
+  currentAction.fadeIn(0.2);
+  currentAction.play();
+}
+
 renderer.setAnimationLoop(() => {
   timer.update();
   const delta = timer.getDelta();
 
   if (model && actions) {
-    const isMoving = !(unitVector.x === 0 && unitVector.z === 0);
-
     const direction = unitVector.clone().normalize();
     model.position.x += direction.x * delta;
     model.position.z += direction.z * delta;
 
+    const isMoving = !(unitVector.x === 0 && unitVector.z === 0);
+
     if (isMoving) {
-      actions.idle.stop();
-      actions.walk.play();
+      playAction(actions.walk);
     } else {
-      actions.walk.stop();
-      actions.idle.play();
+      playAction(actions.idle);
     }
 
     camera.position.copy(model.position).add(cameraOffset);
