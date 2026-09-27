@@ -29,18 +29,11 @@ function basicSetup() {
   return { scene, camera, renderer };
 }
 
-function generateFloor() {
-  const SIZE = 50;
-  const geometry = new THREE.PlaneGeometry(SIZE, SIZE);
-
-  const material = new THREE.MeshBasicMaterial({
-    color: 0x808080,
-  });
-
-  const floor = new THREE.Mesh(geometry, material);
-
-  floor.rotation.x = -Math.PI / 2;
-  return floor;
+function helpers(scene) {
+  const axesHelper = new THREE.AxesHelper(5);
+  const gridHelper = new THREE.GridHelper(50, 50);
+  scene.add(axesHelper);
+  scene.add(gridHelper);
 }
 
 function onKeyPress() {
@@ -127,12 +120,9 @@ function loadModel(scene) {
 // Main implementation
 const { scene, camera, renderer } = basicSetup();
 
+helpers(scene);
 loadModel(scene);
 onKeyPress();
-
-const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
-scene.add(generateFloor());
 
 function playAction(action) {
   if (currentAction === action) return;
