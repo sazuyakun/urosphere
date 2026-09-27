@@ -3,7 +3,7 @@ import { GLTFLoader } from "three/examples/jsm/Addons.js";
 
 const timer = new THREE.Timer();
 const CAMERA_OFFSET = new THREE.Vector3(0, 3, 5);
-const ROTATION_SPEED = 2;
+const ROTATION_SPEED = 6;
 const MOVEMENT_SPEED = 6;
 
 let model, actions, mixer;
@@ -151,11 +151,23 @@ renderer.setAnimationLoop(() => {
   if (model && actions) {
     const direction = state.direction.clone().normalize();
 
+    function shortestAngleDelta(from, to) {
+      return Math.atan2(Math.sin(to - from), Math.cos(to - from));
+    }
+
     if (direction.x !== 0 || direction.z !== 0) {
       state.angle = Math.atan2(direction.x, direction.z);
     }
 
-    model.rotation.set(0, state.angle, 0);
+    const delta_ = shortestAngleDelta(model.rotation.y, state.angle);
+    const targetRotation = model.rotation.y + delta_;
+
+    model.rotation.y = THREE.MathUtils.damp(
+      model.rotation.y,
+      targetRotation,
+      ROTATION_SPEED,
+      delta,
+    );
 
     if (state.sprinting) {
       model.position.x += direction.x * 2 * MOVEMENT_SPEED * delta;
