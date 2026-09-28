@@ -1,7 +1,8 @@
-
 import * as THREE from "three";
 import { GLTFLoader, OrbitControls } from "three/examples/jsm/Addons.js";
+import { Input } from "./Input";
 
+const input = new Input();
 const timer = new THREE.Timer();
 const CAMERA_OFFSET = new THREE.Vector3(0, 3, 5);
 const ROTATION_SPEED = 6;
@@ -11,10 +12,8 @@ const MOVEMENT_SPEED = 6;
 const state = {
   position: new THREE.Vector3(),
   moving: false,
-  sprinting: false,
   angle: Math.PI,
   action: null,
-  direction: new THREE.Vector3(),
 };
 
 // Function declaration
@@ -46,57 +45,6 @@ function helpers(scene) {
   const gridHelper = new THREE.GridHelper(50, 50);
   scene.add(axesHelper);
   scene.add(gridHelper);
-}
-
-function onKeyPress() {
-  document.addEventListener("keydown", function(event) {
-    switch (event.code) {
-      case "KeyW":
-      case "ArrowUp":
-        state.direction.z = -1;
-        break;
-      case "KeyA":
-      case "ArrowLeft":
-        state.direction.x = -1;
-        break;
-      case "KeyS":
-      case "ArrowDown":
-        state.direction.z = 1;
-        break;
-      case "KeyD":
-      case "ArrowRight":
-        state.direction.x = 1;
-        break;
-      case "ShiftLeft":
-      case "ShiftRight":
-        state.sprinting = true;
-        break;
-    }
-  });
-  document.addEventListener("keyup", function(event) {
-    switch (event.code) {
-      case "KeyW":
-      case "ArrowUp":
-        state.direction.z = 0;
-        break;
-      case "KeyA":
-      case "ArrowLeft":
-        state.direction.x = 0;
-        break;
-      case "KeyS":
-      case "ArrowDown":
-        state.direction.z = 0;
-        break;
-      case "KeyD":
-      case "ArrowRight":
-        state.direction.x = 0;
-        break;
-      case "ShiftLeft":
-      case "ShiftRight":
-        state.sprinting = false;
-        break;
-    }
-  });
 }
 
 async function loadModel(scene) {
@@ -149,7 +97,6 @@ const { scene, camera, renderer, controls } = basicSetup();
 const { model, mixer, actions } = await loadModel(scene);
 
 helpers(scene);
-onKeyPress();
 
 renderer.setAnimationLoop(() => {
   timer.update();
@@ -157,7 +104,7 @@ renderer.setAnimationLoop(() => {
 
   state.position = model.position.clone();
 
-  const direction = state.direction.clone().normalize();
+  const direction = input.direction.clone().normalize();
   direction.applyAxisAngle(
     new THREE.Vector3(0, 1, 0),
     controls.getAzimuthalAngle()
@@ -177,7 +124,7 @@ renderer.setAnimationLoop(() => {
     delta,
   );
 
-  if (state.sprinting) {
+  if (input.sprinting) {
     model.position.x += direction.x * 2 * MOVEMENT_SPEED * delta;
     model.position.z += direction.z * 2 * MOVEMENT_SPEED * delta;
   } else {
@@ -185,10 +132,9 @@ renderer.setAnimationLoop(() => {
     model.position.z += direction.z * MOVEMENT_SPEED * delta;
   }
 
-  state.moving = !(state.direction.x === 0 && state.direction.z === 0);
 
-  if (state.moving) {
-    if (state.sprinting) {
+  if (input.moving) {
+    if (input.sprinting) {
       playAction("sprint");
     } else {
       playAction("walk");
