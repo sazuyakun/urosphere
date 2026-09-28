@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/Addons.js";
+import { GLTFLoader, OrbitControls } from "three/examples/jsm/Addons.js";
 
 const timer = new THREE.Timer();
 const CAMERA_OFFSET = new THREE.Vector3(0, 3, 5);
@@ -9,6 +9,7 @@ const MOVEMENT_SPEED = 6;
 let model, actions, mixer;
 
 const state = {
+  position: new THREE.Vector3(),
   moving: false,
   sprinting: false,
   angle: Math.PI,
@@ -25,14 +26,19 @@ function basicSetup() {
     0.1,
     1000,
   );
-  camera.position.set(CAMERA_OFFSET);
+  camera.position.copy(CAMERA_OFFSET);
   camera.lookAt(0, 0, 0);
+
 
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  return { scene, camera, renderer };
+  const controls = new OrbitControls(camera, renderer.domElement)
+  controls.enableDamping = true
+  controls.maxPolarAngle = Math.PI / 2
+
+  return { scene, camera, renderer, controls };
 }
 
 function helpers(scene) {
@@ -43,7 +49,7 @@ function helpers(scene) {
 }
 
 function onKeyPress() {
-  document.addEventListener("keydown", function (event) {
+  document.addEventListener("keydown", function(event) {
     switch (event.key) {
       case "w":
       case "W":
@@ -70,7 +76,7 @@ function onKeyPress() {
         break;
     }
   });
-  document.addEventListener("keyup", function (event) {
+  document.addEventListener("keyup", function(event) {
     switch (event.key) {
       case "w":
       case "W":
@@ -137,8 +143,13 @@ function playAction(action) {
   nextAction.play();
 }
 
+function shortestAngleDelta(from, to) {
+  return Math.atan2(Math.sin(to - from), Math.cos(to - from));
+}
+
+
 // Main implementation
-const { scene, camera, renderer } = basicSetup();
+const { scene, camera, renderer, controls } = basicSetup();
 
 helpers(scene);
 loadModel(scene);
@@ -150,10 +161,8 @@ renderer.setAnimationLoop(() => {
 
   if (model && actions) {
     const direction = state.direction.clone().normalize();
+    state.position = model.position.clone();
 
-    function shortestAngleDelta(from, to) {
-      return Math.atan2(Math.sin(to - from), Math.cos(to - from));
-    }
 
     if (direction.x !== 0 || direction.z !== 0) {
       state.angle = Math.atan2(direction.x, direction.z);
@@ -189,12 +198,17 @@ renderer.setAnimationLoop(() => {
       playAction("idle");
     }
 
-    camera.position.copy(model.position).add(CAMERA_OFFSET);
+    const positionMovedBy = model.position.clone().sub(state.position)
+    camera.position.add(positionMovedBy);
+    controls.target.add(positionMovedBy);
   }
+
 
   if (mixer) {
     mixer.update(delta);
   }
+
+  controls.update()
 
   renderer.render(scene, camera);
 });
