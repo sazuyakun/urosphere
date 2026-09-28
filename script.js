@@ -6,7 +6,6 @@ const CAMERA_OFFSET = new THREE.Vector3(0, 3, 5);
 const ROTATION_SPEED = 6;
 const MOVEMENT_SPEED = 6;
 
-let model, actions, mixer;
 
 const state = {
   position: new THREE.Vector3(),
@@ -50,7 +49,6 @@ function helpers(scene) {
 
 function onKeyPress() {
   document.addEventListener("keydown", function(event) {
-    console.log(event.code)
     switch (event.code) {
       case "KeyW":
       case "ArrowUp":
@@ -100,28 +98,30 @@ function onKeyPress() {
   });
 }
 
-function loadModel(scene) {
+async function loadModel(scene) {
   const FILE_PATH = "/character-e.glb";
 
   const loader = new GLTFLoader();
+  let model, mixer;
 
-  loader.load(FILE_PATH, (gltf) => {
-    const gltfJson = gltf.parser.json;
-    console.log(gltfJson);
+  const gltf = await loader.loadAsync(FILE_PATH)
+  const gltfJson = gltf.parser.json;
+  console.log(gltfJson);
 
-    model = gltf.scene;
-    scene.add(model);
+  model = gltf.scene;
+  scene.add(model);
 
-    const animations = gltf.animations;
+  const animations = gltf.animations;
 
-    mixer = new THREE.AnimationMixer(model);
+  mixer = new THREE.AnimationMixer(model);
 
-    actions = {
-      idle: mixer.clipAction(animations[1]),
-      walk: mixer.clipAction(animations[2]),
-      sprint: mixer.clipAction(animations[3]),
-    };
-  });
+  const actions = {
+    idle: mixer.clipAction(animations[1]),
+    walk: mixer.clipAction(animations[2]),
+    sprint: mixer.clipAction(animations[3]),
+  };
+
+  return { model, mixer, actions }
 }
 
 function playAction(action) {
@@ -145,68 +145,65 @@ function shortestAngleDelta(from, to) {
 
 // Main implementation
 const { scene, camera, renderer, controls } = basicSetup();
+const { model, mixer, actions } = await loadModel(scene);
 
 helpers(scene);
-loadModel(scene);
 onKeyPress();
 
 renderer.setAnimationLoop(() => {
   timer.update();
   const delta = timer.getDelta();
 
-  if (model && actions) {
-    state.position = model.position.clone();
+  state.position = model.position.clone();
 
-    const direction = state.direction.clone().normalize();
-    direction.applyAxisAngle(
-      new THREE.Vector3(0, 1, 0),
-      controls.getAzimuthalAngle()
-    )
+  const direction = state.direction.clone().normalize();
+  direction.applyAxisAngle(
+    new THREE.Vector3(0, 1, 0),
+    controls.getAzimuthalAngle()
+  )
 
-    if (direction.x !== 0 || direction.z !== 0) {
-      state.angle = Math.atan2(direction.x, direction.z);
-    }
+  if (direction.x !== 0 || direction.z !== 0) {
+    state.angle = Math.atan2(direction.x, direction.z);
+  }
 
-    const delta_ = shortestAngleDelta(model.rotation.y, state.angle);
-    const targetRotation = model.rotation.y + delta_;
+  const delta_ = shortestAngleDelta(model.rotation.y, state.angle);
+  const targetRotation = model.rotation.y + delta_;
 
-    model.rotation.y = THREE.MathUtils.damp(
-      model.rotation.y,
-      targetRotation,
-      ROTATION_SPEED,
-      delta,
-    );
+  model.rotation.y = THREE.MathUtils.damp(
+    model.rotation.y,
+    targetRotation,
+    ROTATION_SPEED,
+    delta,
+  );
 
+  if (state.sprinting) {
+    model.position.x += direction.x * 2 * MOVEMENT_SPEED * delta;
+    model.position.z += direction.z * 2 * MOVEMENT_SPEED * delta;
+  } else {
+    model.position.x += direction.x * MOVEMENT_SPEED * delta;
+    model.position.z += direction.z * MOVEMENT_SPEED * delta;
+  }
+
+  state.moving = !(state.direction.x === 0 && state.direction.z === 0);
+
+  if (state.moving) {
     if (state.sprinting) {
-      model.position.x += direction.x * 2 * MOVEMENT_SPEED * delta;
-      model.position.z += direction.z * 2 * MOVEMENT_SPEED * delta;
+      playAction("sprint");
     } else {
-      model.position.x += direction.x * MOVEMENT_SPEED * delta;
-      model.position.z += direction.z * MOVEMENT_SPEED * delta;
+      playAction("walk");
     }
-
-    state.moving = !(state.direction.x === 0 && state.direction.z === 0);
-
-    if (state.moving) {
-      if (state.sprinting) {
-        playAction("sprint");
-      } else {
-        playAction("walk");
-      }
-    } else {
-      playAction("idle");
-    }
-
-    const positionMovedBy = model.position.clone().sub(state.position)
-    camera.position.add(positionMovedBy);
-    controls.target.add(positionMovedBy);
+  } else {
+    playAction("idle");
   }
 
+  const positionMovedBy = model.position.clone().sub(state.position)
+  camera.position.add(positionMovedBy);
+  controls.target.add(positionMovedBy);
 
-  if (mixer) {
-    mixer.update(delta);
-  }
+  // Animation update
+  mixer.update(delta);
 
+  // update orbit controls
   controls.update()
 
   renderer.render(scene, camera);
