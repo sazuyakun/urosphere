@@ -160,9 +160,13 @@ renderer.setAnimationLoop(() => {
   const delta = timer.getDelta();
 
   if (model && actions) {
-    const direction = state.direction.clone().normalize();
     state.position = model.position.clone();
 
+    const direction = state.direction.clone().normalize();
+    direction.applyAxisAngle(
+      new THREE.Vector3(0, 1, 0),
+      controls.getAzimuthalAngle()
+    )
 
     if (direction.x !== 0 || direction.z !== 0) {
       state.angle = Math.atan2(direction.x, direction.z);
