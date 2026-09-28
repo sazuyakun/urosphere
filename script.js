@@ -50,55 +50,50 @@ function helpers(scene) {
 
 function onKeyPress() {
   document.addEventListener("keydown", function(event) {
-    switch (event.key) {
-      case "w":
-      case "W":
+    console.log(event.code)
+    switch (event.code) {
+      case "KeyW":
       case "ArrowUp":
         state.direction.z = -1;
         break;
-      case "a":
-      case "A":
+      case "KeyA":
       case "ArrowLeft":
         state.direction.x = -1;
         break;
-      case "s":
-      case "S":
+      case "KeyS":
       case "ArrowDown":
         state.direction.z = 1;
         break;
-      case "d":
-      case "D":
+      case "KeyD":
       case "ArrowRight":
         state.direction.x = 1;
         break;
-      case "Shift":
+      case "ShiftLeft":
+      case "ShiftRight":
         state.sprinting = true;
         break;
     }
   });
   document.addEventListener("keyup", function(event) {
-    switch (event.key) {
-      case "w":
-      case "W":
+    switch (event.code) {
+      case "KeyW":
       case "ArrowUp":
         state.direction.z = 0;
         break;
-      case "a":
-      case "A":
+      case "KeyA":
       case "ArrowLeft":
         state.direction.x = 0;
         break;
-      case "s":
-      case "S":
+      case "KeyS":
       case "ArrowDown":
         state.direction.z = 0;
         break;
-      case "d":
-      case "D":
+      case "KeyD":
       case "ArrowRight":
         state.direction.x = 0;
         break;
-      case "Shift":
+      case "ShiftLeft":
+      case "ShiftRight":
         state.sprinting = false;
         break;
     }
