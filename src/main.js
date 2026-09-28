@@ -1,51 +1,21 @@
 import * as THREE from "three";
 import { GLTFLoader, OrbitControls } from "three/examples/jsm/Addons.js";
 import { Input } from "./Input";
+import { World } from "./World"
 
 const input = new Input();
+const world = new World();
 const timer = new THREE.Timer();
-const CAMERA_OFFSET = new THREE.Vector3(0, 3, 5);
 const ROTATION_SPEED = 6;
 const MOVEMENT_SPEED = 6;
 
 
 const state = {
   position: new THREE.Vector3(),
-  moving: false,
   angle: Math.PI,
   action: null,
 };
 
-// Function declaration
-function basicSetup() {
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000,
-  );
-  camera.position.copy(CAMERA_OFFSET);
-  camera.lookAt(0, 0, 0);
-
-
-  const renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
-
-  const controls = new OrbitControls(camera, renderer.domElement)
-  controls.enableDamping = true
-  controls.maxPolarAngle = Math.PI / 2
-
-  return { scene, camera, renderer, controls };
-}
-
-function helpers(scene) {
-  const axesHelper = new THREE.AxesHelper(5);
-  const gridHelper = new THREE.GridHelper(50, 50);
-  scene.add(axesHelper);
-  scene.add(gridHelper);
-}
 
 async function loadModel(scene) {
   const FILE_PATH = "/character-e.glb";
@@ -93,12 +63,10 @@ function shortestAngleDelta(from, to) {
 
 
 // Main implementation
-const { scene, camera, renderer, controls } = basicSetup();
-const { model, mixer, actions } = await loadModel(scene);
+const { model, mixer, actions } = await loadModel(world.scene);
 
-helpers(scene);
 
-renderer.setAnimationLoop(() => {
+world.renderer.setAnimationLoop(() => {
   timer.update();
   const delta = timer.getDelta();
 
@@ -107,7 +75,7 @@ renderer.setAnimationLoop(() => {
   const direction = input.direction.clone().normalize();
   direction.applyAxisAngle(
     new THREE.Vector3(0, 1, 0),
-    controls.getAzimuthalAngle()
+    world.controls.getAzimuthalAngle()
   )
 
   if (direction.x !== 0 || direction.z !== 0) {
@@ -144,14 +112,11 @@ renderer.setAnimationLoop(() => {
   }
 
   const positionMovedBy = model.position.clone().sub(state.position)
-  camera.position.add(positionMovedBy);
-  controls.target.add(positionMovedBy);
+  world.follow(positionMovedBy)
 
   // Animation update
   mixer.update(delta);
 
-  // update orbit controls
-  controls.update()
+  world.render()
 
-  renderer.render(scene, camera);
 });
