@@ -1,15 +1,26 @@
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/Addons.js";
+import { GLTFLoader, type GLTF } from "three/examples/jsm/Addons.js";
+import type { Input } from "./Input";
+
+type ActionName = "idle" | "walk" | "sprint";
 
 export class Character {
-  static async load(scene, path) {
+  ROTATION_SPEED = 6;
+  MOVEMENT_SPEED = 6;
+  model: THREE.Group;
+  position: THREE.Vector3;
+  action: ActionName | null;
+  angle: number;
+  animations: THREE.AnimationClip[];
+  mixer: THREE.AnimationMixer;
+  actions: Record<ActionName, THREE.AnimationAction>;
+
+  static async load(scene: THREE.Scene, path: string) {
     const gltf = await new GLTFLoader().loadAsync(path)
     scene.add(gltf.scene)
     return new Character(gltf)
   }
-  constructor(gltf) {
-    this.ROTATION_SPEED = 6;
-    this.MOVEMENT_SPEED = 6;
+  constructor(gltf: GLTF) {
     this.model = gltf.scene
     this.position = new THREE.Vector3()
     this.action = null
@@ -29,10 +40,10 @@ export class Character {
     };
   }
 
-  playAction(action) {
+  playAction(action: ActionName) {
     if (this.action === action) return;
 
-    this.actions[this.action]?.fadeOut(0.2);
+    if (this.action) this.actions[this.action].fadeOut(0.2);
 
     const nextAction = this.actions[action];
 
@@ -43,11 +54,11 @@ export class Character {
     nextAction.play();
   }
 
-  shortestAngleDelta(from, to) {
+  shortestAngleDelta(from: number, to: number) {
     return Math.atan2(Math.sin(to - from), Math.cos(to - from));
   }
 
-  update(delta, input, azimuthAngle) {
+  update(delta: number, input: Input, azimuthAngle: number) {
     this.position = this.model.position.clone();
 
     const direction = input.direction.clone().normalize()

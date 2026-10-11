@@ -1,6 +1,9 @@
 import * as THREE from "three";
 
 export class Input {
+  direction: THREE.Vector3;
+  sprinting: boolean;
+
   constructor() {
     this.direction = new THREE.Vector3();
     this.sprinting = false;
@@ -9,7 +12,7 @@ export class Input {
     document.addEventListener("keyup", (event) => { this.onKey(event.code, false) })
   }
 
-  onKey(code, pressed) {
+  onKey(code: string, pressed: boolean) {
     switch (code) {
       case "KeyW":
       case "ArrowUp":

@@ -2,6 +2,11 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 
 export class World {
+  scene: THREE.Scene;
+  camera: THREE.PerspectiveCamera;
+  renderer: THREE.WebGLRenderer;
+  controls: OrbitControls;
+
   constructor() {
     this.scene = new THREE.Scene();
 
@@ -26,7 +31,7 @@ export class World {
     this.scene.add(new THREE.AxesHelper(5), new THREE.GridHelper(50, 50))
   }
 
-  follow(delta) {
+  follow(delta: THREE.Vector3) {
     this.camera.position.add(delta);
     this.controls.target.add(delta);
   }
