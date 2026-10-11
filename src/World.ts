@@ -29,6 +29,14 @@ export class World {
     this.controls.maxPolarAngle = Math.PI / 2
 
     this.scene.add(new THREE.AxesHelper(5), new THREE.GridHelper(50, 50))
+
+    window.addEventListener("resize", this.onResize)
+  }
+
+  onResize = () => {
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
   follow(delta: THREE.Vector3) {
@@ -42,6 +50,7 @@ export class World {
   }
 
   dispose() {
+    window.removeEventListener("resize", this.onResize);
     this.renderer.setAnimationLoop(null);
     this.controls.dispose();
     this.renderer.dispose();
