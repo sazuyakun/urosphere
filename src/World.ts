@@ -7,7 +7,7 @@ export class World {
   renderer: THREE.WebGLRenderer;
   controls: OrbitControls;
 
-  constructor() {
+  constructor(container: HTMLElement) {
     this.scene = new THREE.Scene();
 
     const CAMERA_OFFSET = new THREE.Vector3(0, 3, 5);
@@ -22,7 +22,7 @@ export class World {
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(this.renderer.domElement);
+    container.appendChild(this.renderer.domElement);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
     this.controls.enableDamping = true
@@ -39,5 +39,12 @@ export class World {
   render() {
     this.controls.update()
     this.renderer.render(this.scene, this.camera);
+  }
+
+  dispose() {
+    this.renderer.setAnimationLoop(null);
+    this.controls.dispose();
+    this.renderer.dispose();
+    this.renderer.domElement.remove();
   }
 }

@@ -8,8 +8,16 @@ export class Input {
     this.direction = new THREE.Vector3();
     this.sprinting = false;
 
-    document.addEventListener("keydown", (event) => { this.onKey(event.code, true) })
-    document.addEventListener("keyup", (event) => { this.onKey(event.code, false) })
+    document.addEventListener("keydown", this.onKeyDown)
+    document.addEventListener("keyup", this.onKeyUp)
+  }
+
+  onKeyDown = (event: KeyboardEvent) => { this.onKey(event.code, true) }
+  onKeyUp = (event: KeyboardEvent) => { this.onKey(event.code, false) }
+
+  dispose() {
+    document.removeEventListener("keydown", this.onKeyDown)
+    document.removeEventListener("keyup", this.onKeyUp)
   }
 
   onKey(code: string, pressed: boolean) {
