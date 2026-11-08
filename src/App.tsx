@@ -1,44 +1,30 @@
-import { useEffect, useRef } from "react";
-import * as THREE from "three";
-import { Input } from "./Input";
-import { World } from "./World";
-import { Character } from "./Character";
-import { PerfStats } from "./PerfStats";
+import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import { Player } from "./Player";
+import { PerfMonitor } from "./PerfMonitor";
+
+// Retina screens render at 1.5x instead of 2x: much sharper than 1x for about
+// 60% of the GPU cost of 2x. Screens below this get MSAA instead, since their
+// bigger pixels make jagged edges visible. See the measurements in docs/PLAN.md.
+const MAX_PIXEL_RATIO = 1.5;
 
 export function App() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const input = new Input();
-    input.connect();
-    const world = new World(containerRef.current!);
-    const stats = import.meta.env.DEV ? new PerfStats(containerRef.current!, world.renderer) : null;
-    const timer = new THREE.Timer();
-    let disposed = false;
-
-    Character.load(world.scene, "/character-e.glb").then((character) => {
-      if (disposed) return;
-
-      world.renderer.setAnimationLoop(() => {
-        stats?.begin();
-        timer.update();
-        const delta = timer.getDelta();
-
-        const movedBy = character.update(delta, input, world.controls.getAzimuthalAngle());
-        world.follow(movedBy);
-
-        world.render();
-        stats?.end();
-      });
-    });
-
-    return () => {
-      disposed = true;
-      stats?.dispose();
-      input.disconnect();
-      world.dispose();
-    };
-  }, []);
-
-  return <div ref={containerRef} />;
+  return (
+    <Canvas
+      dpr={[1, MAX_PIXEL_RATIO]}
+      // antialias can only be chosen when the renderer is created. alpha: false
+      // keeps an opaque canvas (R3F defaults to transparent).
+      gl={{ antialias: window.devicePixelRatio < MAX_PIXEL_RATIO, alpha: false }}
+      // No tone mapping until we decide on colour in Phase 1 (R3F defaults to ACES).
+      flat
+      camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 3, 5] }}
+    >
+      <axesHelper args={[5]} />
+      <gridHelper args={[50, 50]} />
+      <Suspense fallback={null}>
+        <Player />
+      </Suspense>
+      {import.meta.env.DEV && <PerfMonitor />}
+    </Canvas>
+  );
 }

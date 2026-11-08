@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
+import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
 import type { Input } from "./Input";
 
 type ActionName = "idle" | "walk" | "sprint";
@@ -20,11 +20,6 @@ export class Character {
   mixer: THREE.AnimationMixer;
   actions: Record<ActionName, THREE.AnimationAction>;
 
-  static async load(scene: THREE.Scene, path: string) {
-    const gltf = await new GLTFLoader().loadAsync(path)
-    scene.add(gltf.scene)
-    return new Character(gltf)
-  }
   constructor(gltf: GLTF) {
     this.model = gltf.scene
     this.action = null
