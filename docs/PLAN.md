@@ -53,7 +53,7 @@ These change real decisions below, so answer them whenever you can:
 3. ~~The place~~ Decided: a golden-hour island. See `docs/ART_DIRECTION.md`.
 4. ~~Voice~~ Decided: built in, early in Phase 3, so it really feels like being together.
 5. **What you do together.** Collected in section 8 (ideas). Pick the 2 or 3 that matter most before Phase 4.
-6. **Trackpad, mouse or controller?** And does she play games much? Used to tune the camera.
+6. **Trackpad, mouse or controller?** Used to tune mouse sensitivity for the free orbit camera.
 
 ---
 
@@ -77,7 +77,7 @@ Each row is something we must decide. "Leaning" is my recommendation; nothing is
 | D12 | Access | Secret link / password / login | Secret room link + a shared passphrase. Only two people | Open |
 | D13 | Desktop app | Tauri / Electron | Tauri (small download, uses the system webview). Electron if rendering differs too much between Mac and Windows | Open |
 | D14 | Project layout | Single app / pnpm workspace (`web`, `server`, `shared`) | Workspace, but only when the server starts (Phase 3) | Open |
-| D15 | Camera | Free orbit (AAA) / assisted follow / fixed angle | Assisted follow: 5 m behind, eases round behind you as you walk, drag to orbit, scroll to zoom, 60° field of view | Decided |
+| D15 | Camera | Free orbit (AAA) / assisted follow / fixed angle | Free orbit like Genshin and Zelda (owner's choice): mouse look with pointer lock, 5 m back, scroll to zoom, no auto-follow, recenter key, 60° field of view | Decided |
 | D16 | Light and colour | Golden hour / bright day / pastel dawn | Warm golden afternoon: low sun, gradient sky, fog, one crisp following shadow, no post-processing at first | Decided |
 | D17 | Voice chat | WebRTC peer-to-peer / through our server / external app | WebRTC peer-to-peer audio (Opus), signalling over our room's WebSocket, STUN + TURN fallback. Optional proximity volume (louder when you're close) | Open (detail in Phase 3) |
 
@@ -108,7 +108,7 @@ Built to `docs/ART_DIRECTION.md`. Each step measured.
 - [ ] Ground plane + sun and hemisphere light, first cel (toon) material with a gradient ramp
 - [ ] Gradient sky dome + distance fog, camera far plane trimmed to match
 - [ ] Shadows: one crisp directional shadow that follows the player
-- [ ] Assisted follow camera: distance, pitch, zoom, ease behind while walking, drag to orbit, 60° field of view
+- [ ] Free orbit camera: pointer-lock mouse look, distance, pitch limits, zoom, recenter key, sensitivity, 60° field of view
 - [ ] Ink outlines (inverted hull) + rim light on the placeholder character
 - [ ] Shared toon shader with tinted shadows, replacing `MeshToonMaterial`
 - [ ] Install Blender + Blender MCP, test one tree and one rock against the model rules
@@ -116,7 +116,7 @@ Built to `docs/ART_DIRECTION.md`. Each step measured.
 - [ ] The island: terrain shape, sea around it, keep the player on land, camera never below ground
 - [ ] Landmarks: big tree on a hill, pond and stream, beach and pier, cottage, cliff lookout
 - [ ] Instanced grass and flowers with wind sway
-- [ ] Simple collision with props, camera pulls in front of big objects
+- [ ] Simple collision with props, camera pulls in front of big objects (important with free orbit)
 - [ ] Loading screen while assets download
 - [ ] The two characters: try Claude + Blender MCP first, commission if needed (in parallel, whenever ready)
 

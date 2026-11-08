@@ -2,7 +2,7 @@
 
 A reference board for deciding how the world looks, feels and is viewed.
 
-> **Decided 2026-11-08:** anime cel shading with ink outlines, semi-realistic characters, a golden-hour island and an assisted follow camera. The decisions live in `docs/ART_DIRECTION.md`. This file stays as the research behind them. The "my lean" notes below are what was proposed before the owner chose Haven + anime outlines.
+> **Decided 2026-11-08:** anime cel shading with ink outlines, semi-realistic characters, a golden-hour island and a free orbit camera like Genshin and Zelda (the owner picked this over the assisted follow I proposed). The decisions live in `docs/ART_DIRECTION.md`. This file stays as the research behind them. The "my lean" notes below are what was proposed before the owner chose Haven + anime outlines.
 
 ---
 

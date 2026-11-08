@@ -2,7 +2,7 @@
 
 The decided look, world, camera and light. Decided 2026-11-08: the owner loved Haven and wanted anime-style 3D with ink outlines and semi-realistic characters, and asked for the rest to be decided for them. This is the source of truth for every model, material and scene change. Numbers are starting points, tuned by playing and measuring.
 
-**One line:** a warm golden-hour island drawn like an anime film. Semi-realistic characters, flat cel colours with soft shadow edges, ink outlines, and a camera that follows you like a friend walking behind.
+**One line:** a warm golden-hour island drawn like an anime film. Semi-realistic characters, flat cel colours with soft shadow edges, ink outlines, and a free camera you steer yourself, like Genshin.
 
 **Main references:** **Haven** (characters, colour, the couple), **Genshin Impact** (cel shading on semi-realistic characters, rim light, open-world camera), **Sable** (ink lines and flat colour carrying a whole world), **Guilty Gear Xrd** (how to make 3D read as 2D). Full list in `docs/REFERENCES.md`.
 
@@ -44,23 +44,25 @@ How it's built (Phase 1 steps):
 
 ---
 
-## 3. Camera: assisted follow
+## 3. Camera: free orbit (Genshin / Zelda)
 
-A camera that follows behind you like a friend, but lets you look around whenever you want.
+Chosen by the owner on 2026-11-08 over the assisted follow camera. You steer the camera yourself, as in Genshin Impact on PC or Zelda: Breath of the Wild. It stays where you put it.
 
 | Setting | Value |
 | --- | --- |
-| Looks at | Character's upper chest, 1.5 m above the feet, centred (no over-the-shoulder offset; that's for shooters) |
+| Control | Click the game to capture the mouse (pointer lock, like Genshin on PC). Moving the mouse or trackpad turns the camera with no button held. `Esc` releases the mouse. Dragging also works while the mouse isn't captured |
+| Looks at | Character's upper chest, 1.5 m above the feet, centred (no over-the-shoulder offset) |
 | Distance | 5 m by default. Scroll or pinch zooms between 2.5 m and 8 m |
-| Pitch | 15° looking down by default, limited to between 5° and 60° |
+| Pitch | 15° looking down by default, limited to between 10° looking up and 70° looking down |
 | Field of view | 60° (75° today is wide and stretches the edges) |
-| Auto-follow | While you walk and haven't touched the camera, it eases round behind you over about 1.5 s. It doesn't swing when you walk towards it |
-| Manual orbit | Drag with mouse or trackpad. Auto-follow waits about 1.5 s after you let go |
-| Never clips | Stays above the ground, and later pulls in front of big objects (trees, cottage) between it and you |
+| Auto-follow | None. The camera never swings by itself |
+| Recenter | One key snaps the camera behind the character, like Zelda's target button (key chosen when we build it) |
+| Mouse sensitivity | A setting, because trackpads and mice feel very different |
+| Never clips | Stays above the ground and pulls in front of big objects (trees, cottage, cliff) between it and you. More important with free orbit, since you can swing it into anything |
 | Far plane | About 300 m. Fog hides everything before that, so the far edge is never drawn |
-| Later | Controller support, touch on phones |
+| Later | Controller (right stick), touch on phones |
 
-Movement stays relative to the camera, as it is now.
+Movement stays relative to the camera, as it is now: W always walks away from the camera.
 
 ---
 
