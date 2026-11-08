@@ -106,9 +106,9 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 Built to `docs/ART_DIRECTION.md`. Each step measured.
 
 - [x] Ground plane + sun and sky light, first cel (toon) material with a shared gradient ramp
-- [ ] Gradient sky dome + distance fog, camera far plane trimmed to match
+- [x] Gradient sky dome + sun disc and glow + distance fog, camera far plane trimmed to 300 m
 - [ ] Shadows: one crisp directional shadow that follows the player
-- [ ] Free orbit camera: pointer-lock mouse look, distance, pitch limits, zoom, recenter key, sensitivity, 60° field of view
+- [ ] Free orbit camera: pointer-lock mouse look, distance, pitch limits, zoom, recenter key, sensitivity, 60° field of view. Aim at chest height (1.5 m): today the camera aims at the feet and can sink to ground level, where the ground is seen edge-on
 - [ ] Ink outlines (inverted hull) + rim light on the placeholder character
 - [ ] Shared toon shader with tinted shadows, replacing `MeshToonMaterial`
 - [ ] Install Blender + Blender MCP, test one tree and one rock against the model rules
@@ -212,6 +212,7 @@ Rough size: a binary `move` is about 20 bytes. At 20 per second that's 400 bytes
 | Date | Step | fps | Worst frame | CPU avg / worst | Calls | Tris | Heap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026-11-08 | Baseline (character + grid) | 60 | 18 ms | 0.2 / 0.8 ms | 8 | 72 | 56 MB | Dev build, Mac, sprinting |
+| 2026-11-08 | Gradient sky, sun, fog | 60 | 17 ms | 0.3 / 0.9 ms | 9 | 1034 | 28 MB | GPU 0.5–0.6 ms looking down, 0.4–1.3 ms at the horizon (the timer is noisy this lightly loaded). Sky drawn last so covered pixels are skipped |
 | 2026-11-08 | Ground, sun, sky light, cel material | 60 | 18 ms | 0.4 / 1.0 ms | 8 | 74 | 27 MB | GPU 0.4 ms at 985×1440 (1.5×). Lit grass measured `#a7c969` (predicted `#a6c966`) |
 | 2026-11-08 | React Three Fiber port | 60 | 18 ms | 0.25 / 0.5 ms | 7 | 72 | 28 MB | Sprinting. GPU 1.0–1.2 ms at 985×1440 (1.5×). Bundle 232 → 329 kB gzip |
 

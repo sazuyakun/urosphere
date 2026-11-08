@@ -77,7 +77,7 @@ One fixed time of day.
 | Sun | Low and warm, about 25° above the horizon. Peach-gold light |
 | Sky light | Flat ambient light in the sky colour. Not a hemisphere light: that shades smoothly by surface direction and blurs the two cel tones into a gradient (found in Phase 1). Flat ambient keeps every shadow one even, blue-tinted colour |
 | Shadows | One directional shadow map, 2048 px, covering about 60 m around the player and following them. **Crisp edges** (cel style, and cheaper than soft filtering) |
-| Sky | Gradient dome, warm peach at the horizon to soft blue overhead, with a glow around the sun |
+| Sky | Gradient dome, warm peach at the horizon to soft blue overhead, a stylized sun disc with a soft glow, in the same direction as the sunlight. Infinitely far away and drawn after the world, so only visible sky pixels cost anything |
 | Fog | Distance fog in the horizon colour, starting around 60 m, solid by 250 m |
 | Post-processing | None in Phase 1 |
 
@@ -88,7 +88,8 @@ Starting palette (tuned in the browser):
 | `sunlight` | `#ffe4c2` | Sun colour (was `#ffd9a8`, which turned green grass olive) |
 | `shadowTint` | `#7a74b8` | What shadows lean towards |
 | `skyTop` | `#9cc4ec` | Sky overhead |
-| `skyHorizon` | `#ffd2b0` | Horizon and fog |
+| `skyHorizon` | `#ffd2b0` | Horizon and fog (must stay identical so the ground melts into the sky) |
+| `sunGlow` | `#fff1d6` | Sun disc and the glow around it |
 | `grass` | `#9cc46a` | Meadow base. Shows as about `#a7c969` in sunlight |
 | `ink` | `#2b2233` | Outline base (mixed with the surface colour) |
 
