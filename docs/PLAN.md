@@ -50,9 +50,10 @@ These change real decisions below, so answer them whenever you can:
 
 1. **Devices.** What computers do you and she use? (The weaker one sets the performance target.) Will she ever play on a phone or tablet?
 2. **Distance.** Where are the two of you, roughly? This picks where the server lives.
-3. **The place.** Partly answered (2026-11-08): cozy and cute, one fixed time of day, a small open world that can grow. The exact setting is still open. See `docs/REFERENCES.md`.
-4. **Voice.** Do you want built-in voice chat, or will you be on a call anyway?
-5. **What you do together.** Sit together, plant things, leave notes for each other, small games, take photos? Pick the 2 or 3 that matter most.
+3. ~~The place~~ Decided: a golden-hour island. See `docs/ART_DIRECTION.md`.
+4. ~~Voice~~ Decided: built in, early in Phase 3, so it really feels like being together.
+5. **What you do together.** Collected in section 8 (ideas). Pick the 2 or 3 that matter most before Phase 4.
+6. **Trackpad, mouse or controller?** And does she play games much? Used to tune the camera.
 
 ---
 
@@ -62,9 +63,9 @@ Each row is something we must decide. "Leaning" is my recommendation; nothing is
 
 | # | Topic | Options | Leaning | Status |
 | --- | --- | --- | --- | --- |
-| D1 | World shape | Small open world (flat) / tiny planet | Owner wants a small open world that can grow. Flat is simpler and grows more easily; a planet (like Messenger) needs spherical movement and a new camera | Open |
-| D2 | Art style | Chunky cute / soft toon / painterly / watercolor filter | Stylized and animated-looking, better than the current blocky character, not realistic. Lean: chunky cute shapes + soft toon shading (cheapest per pixel). Pick from references | Open |
-| D3 | 3D assets | Claude + Blender MCP / AI generators / hand-made / commissioned | Our own models, no free packs (owner, 2026-11-08). Lean: props built with Claude + Blender MCP; characters commissioned or AI base + cleanup. Test one prop first | Open |
+| D1 | World shape | Small open world (flat) / tiny planet | A flat island about 250 m across, surrounded by sea. New places later are new islands or realms | Decided |
+| D2 | Art style | Chunky cute / soft toon / painterly / watercolor filter / anime cel | Anime cel with semi-realistic characters: 2-tone cel shading with tinted shadows, ink outlines on characters and hero props, rim light, flat colour, no tone mapping (Haven + Genshin + Sable) | Decided |
+| D3 | 3D assets | Claude + Blender MCP / AI generators / hand-made / commissioned | Our own models, no free packs. Characters commissioned from an artist; props and world made with Claude + Blender MCP. Placeholder character until then | Decided |
 | D4 | Asset format | glTF + Meshopt/Draco + KTX2 textures | glTF compressed with `gltf-transform`, KTX2 textures once we have more than a few | Open |
 | D5 | Renderer | `WebGLRenderer` / `WebGPURenderer` | Stay on WebGL2 until we hit a limit. Revisit WebGPU later | Open |
 | D6 | React Three Fiber | Move to R3F / stay imperative | Ported before the world grows. Components compose the scene, plain classes run per-frame logic from `useFrame`, nothing per-frame goes through React state. Costs +97 kB gzip because R3F bundles all of three.js | Decided |
@@ -76,8 +77,9 @@ Each row is something we must decide. "Leaning" is my recommendation; nothing is
 | D12 | Access | Secret link / password / login | Secret room link + a shared passphrase. Only two people | Open |
 | D13 | Desktop app | Tauri / Electron | Tauri (small download, uses the system webview). Electron if rendering differs too much between Mac and Windows | Open |
 | D14 | Project layout | Single app / pnpm workspace (`web`, `server`, `shared`) | Workspace, but only when the server starts (Phase 3) | Open |
-| D15 | Camera | Free orbit (AAA) / assisted follow / fixed angle | Lean: assisted follow that swings behind you, with free orbit on drag. Depends on trackpad vs mouse vs controller | Open |
-| D16 | Light and colour | Golden hour / bright day / pastel dawn | One fixed time of day (owner). Lean: warm golden afternoon, fog, gradient sky, one following shadow, no post-processing at first | Open |
+| D15 | Camera | Free orbit (AAA) / assisted follow / fixed angle | Assisted follow: 5 m behind, eases round behind you as you walk, drag to orbit, scroll to zoom, 60° field of view | Decided |
+| D16 | Light and colour | Golden hour / bright day / pastel dawn | Warm golden afternoon: low sun, gradient sky, fog, one crisp following shadow, no post-processing at first | Decided |
+| D17 | Voice chat | WebRTC peer-to-peer / through our server / external app | WebRTC peer-to-peer audio (Opus), signalling over our room's WebSocket, STUN + TURN fallback. Optional proximity volume (louder when you're close) | Open (detail in Phase 3) |
 
 ---
 
@@ -101,16 +103,22 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 
 ### Phase 1: A beautiful place, solo
 
-- [ ] Ground plane + the first lights (one sun light + soft ambient/hemisphere light)
-- [ ] Colour setup: tone mapping, sky colour, fog to hide the far edge
-- [ ] Shadows: one directional shadow, tight shadow camera that follows the player
-- [ ] The island: terrain shape, water around it, keep the player on land
-- [ ] Props: trees, rocks, flowers. **Instanced** so 500 flowers cost 1 draw call
-- [ ] Simple collision with props
-- [ ] Camera doesn't clip into the ground or through trees
+Built to `docs/ART_DIRECTION.md`. Each step measured.
+
+- [ ] Ground plane + sun and hemisphere light, first cel (toon) material with a gradient ramp
+- [ ] Gradient sky dome + distance fog, camera far plane trimmed to match
+- [ ] Shadows: one crisp directional shadow that follows the player
+- [ ] Assisted follow camera: distance, pitch, zoom, ease behind while walking, drag to orbit, 60° field of view
+- [ ] Ink outlines (inverted hull) + rim light on the placeholder character
+- [ ] Shared toon shader with tinted shadows, replacing `MeshToonMaterial`
+- [ ] Install Blender + Blender MCP, test one tree and one rock against the model rules
 - [ ] Asset pipeline: a script that compresses every model before it goes into `public/`
+- [ ] The island: terrain shape, sea around it, keep the player on land, camera never below ground
+- [ ] Landmarks: big tree on a hill, pond and stream, beach and pier, cottage, cliff lookout
+- [ ] Instanced grass and flowers with wind sway
+- [ ] Simple collision with props, camera pulls in front of big objects
 - [ ] Loading screen while assets download
-- [ ] Looks pass: wind sway in a vertex shader, grass, small particles (fireflies, petals)
+- [ ] Commission the two characters (in parallel, whenever ready)
 
 ### Phase 2: Things to do, solo
 
@@ -125,7 +133,9 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 - [ ] pnpm workspace: `web`, `server`, `shared` (message types live in `shared`)
 - [ ] Local server that runs one room
 - [ ] Join a room, see the other character appear and leave
+- [ ] **Voice chat** (D17): microphone permission, mute button, peer-to-peer audio, works through strict networks via TURN
 - [ ] Send own position and facing, show the other player smoothly (interpolation)
+- [ ] Optional proximity voice: her voice gets louder as you get closer
 - [ ] Sync animations and emotes
 - [ ] Measure: bandwidth per player, delay, behaviour with bad wifi (Chrome network throttling)
 - [ ] Reconnect cleanly when the connection drops
@@ -135,9 +145,7 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 
 - [ ] Shared objects: if one of us picks something up, the other sees it in our hands
 - [ ] Persistent world: things we plant or move are still there tomorrow
-- [ ] Sit together, wave, hug, whatever we picked in the open questions
-- [ ] Notes you leave for the other person to find
-- [ ] Nice touch for long distance: show each person's local time somewhere in the world
+- [ ] The 2–3 favourite ideas from section 8, one at a time
 
 ### Phase 5: Online
 
@@ -153,13 +161,10 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 
 ### Later, maybe
 
-- Day and night cycle, where you can both go to sleep to skip to morning instead of waiting (owner idea)
-- More places to explore ("realms") as the world grows
-
-- Voice chat (WebRTC audio)
 - Phones and tablets (touch controls)
+- Controller support
 - WebGPU renderer
-- Photo mode
+- More ideas in section 8
 
 ---
 
@@ -227,3 +232,31 @@ Chosen: 1.5× without AA on retina, 1× with MSAA on normal screens. Both cost a
 - Budgets checked, numbers noted
 - No debug logs, no dead code, no unused fields
 - Small commit with a short lowercase message
+
+---
+
+## 8. Ideas for together (backlog)
+
+Collected from our conversations. Not scheduled yet; pick favourites before Phase 4.
+
+**Being close**
+- Sit together on a bench, on the pier at sunset, or by the campfire
+- Walk holding hands
+- Hug, wave and other emotes (the placeholder model already has `emote-yes`, `emote-no`, `wave`)
+- Lie in a hammock or on the grass and look at the sky
+
+**Making the place yours**
+- Plant flowers that are still there tomorrow
+- A shared cottage to decorate together (like Sky's home space)
+- Leave letters or notes for the other person to find (like Messenger)
+- Photo mode to take pictures together
+
+**Long-distance touches**
+- Show each person's local time somewhere in the world
+- Day and night cycle, where you both go to sleep to skip to morning instead of waiting
+
+**Exploring**
+- New islands and realms as the world grows
+- Glide together off the cliff (like Haven)
+- Fireflies in the evening, stars at night
+- Small games to play together
