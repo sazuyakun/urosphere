@@ -22,6 +22,9 @@ export class Character {
 
   constructor(gltf: GLTF) {
     this.model = gltf.scene
+    this.model.traverse((object) => {
+      if ((object as THREE.Mesh).isMesh) object.castShadow = true
+    })
     this.action = null
     this.angle = Math.PI
 

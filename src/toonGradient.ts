@@ -4,7 +4,11 @@ import * as THREE from "three";
 // up by how directly a surface faces a light: the left half is shadow, the right
 // half is lit. Linear filtering across the one step in the middle gives the
 // narrow soft edge between the two tones (Haven's softness, not hard bands).
-const SHADOW = 110;
+//
+// The shadow side gets no sunlight at all (0), exactly like a cast shadow, which
+// also removes all sunlight. That way a surface turned away from the sun and a
+// surface in another object's shadow are the same colour, as in anime.
+const SHADOW = 0;
 const LIT = 255;
 const RAMP = new Uint8Array([SHADOW, SHADOW, SHADOW, SHADOW, LIT, LIT, LIT, LIT]);
 

@@ -23,6 +23,10 @@ export function App() {
       gl={{ antialias: window.devicePixelRatio < MAX_PIXEL_RATIO, alpha: false }}
       // No tone mapping: cel art needs the exact palette colours on screen (R3F defaults to ACES).
       flat
+      // Crisp shadows with each edge pixel blended with its neighbours (PCF). The
+      // cheapest "basic" type left visible stair steps, because the low sun
+      // stretches each shadow pixel about 2.4x along the ground.
+      shadows="percentage"
       camera={{ fov: 75, near: 0.1, far: CAMERA_FAR, position: [0, 3, 5] }}
     >
       <Sky />

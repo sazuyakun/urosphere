@@ -7,7 +7,7 @@ const GROUND_SIZE = 1000;
 
 export function Ground() {
   return (
-    <mesh rotation-x={-Math.PI / 2}>
+    <mesh rotation-x={-Math.PI / 2} receiveShadow>
       <planeGeometry args={[GROUND_SIZE, GROUND_SIZE]} />
       <meshToonMaterial color={PALETTE.grass} gradientMap={TOON_GRADIENT} />
     </mesh>
