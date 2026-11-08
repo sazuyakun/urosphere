@@ -4,11 +4,16 @@ import type { Input } from "./Input";
 
 type ActionName = "idle" | "walk" | "sprint";
 
+const UP = new THREE.Vector3(0, 1, 0);
+
 export class Character {
   ROTATION_SPEED = 6;
   MOVEMENT_SPEED = 6;
+  SPRINT_MULTIPLIER = 2;
   model: THREE.Group;
-  position: THREE.Vector3;
+  // Scratch vectors reused every frame so update() allocates nothing.
+  direction = new THREE.Vector3();
+  movedBy = new THREE.Vector3();
   action: ActionName | null;
   angle: number;
   animations: THREE.AnimationClip[];
@@ -22,7 +27,6 @@ export class Character {
   }
   constructor(gltf: GLTF) {
     this.model = gltf.scene
-    this.position = new THREE.Vector3()
     this.action = null
     this.angle = Math.PI
 
@@ -64,15 +68,10 @@ export class Character {
     return Math.atan2(Math.sin(to - from), Math.cos(to - from));
   }
 
+  // Returns how far the character moved this frame. The vector is reused next
+  // frame, so read it right away and don't keep a reference to it.
   update(delta: number, input: Input, azimuthAngle: number) {
-    this.position = this.model.position.clone();
-
-    const direction = input.direction.clone().normalize()
-    direction.applyAxisAngle(
-      new THREE.Vector3(0, 1, 0),
-      azimuthAngle
-    )
-
+    const direction = this.direction.copy(input.direction).normalize().applyAxisAngle(UP, azimuthAngle);
 
     if (direction.x !== 0 || direction.z !== 0) {
       this.angle = Math.atan2(direction.x, direction.z);
@@ -87,14 +86,9 @@ export class Character {
       delta,
     );
 
-    if (input.sprinting) {
-      this.model.position.x += direction.x * 2 * this.MOVEMENT_SPEED * delta;
-      this.model.position.z += direction.z * 2 * this.MOVEMENT_SPEED * delta;
-    } else {
-      this.model.position.x += direction.x * this.MOVEMENT_SPEED * delta;
-      this.model.position.z += direction.z * this.MOVEMENT_SPEED * delta;
-    }
-
+    const speed = input.sprinting ? this.MOVEMENT_SPEED * this.SPRINT_MULTIPLIER : this.MOVEMENT_SPEED;
+    this.movedBy.copy(direction).multiplyScalar(speed * delta);
+    this.model.position.add(this.movedBy);
 
     if (input.moving) {
       if (input.sprinting) {
@@ -107,6 +101,6 @@ export class Character {
     }
 
     this.mixer.update(delta);
-    return this.model.position.clone().sub(this.position)
+    return this.movedBy
   }
 }

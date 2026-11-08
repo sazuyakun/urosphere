@@ -89,10 +89,10 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 - [x] TypeScript
 - [x] React with imperative three.js
 - [x] Opposite keys no longer cancel, window resize handled
-- [ ] Commit the "animation clips by name" change in `Character.ts`
+- [x] Commit the "animation clips by name" change in `Character.ts`
 - [x] **Performance baseline:** dev-only overlay (`PerfStats`) with fps, worst frame, CPU ms, draw calls, triangles, GPU objects and heap
 - [ ] Import loaders from their own files instead of `Addons.js`, so the build stops bundling Draco and Basis decoders we don't use
-- [ ] Remove per-frame allocations in `Character.update` (scratch vectors, shared `UP`)
+- [x] Remove per-frame allocations in `Character.update` (scratch vectors, shared `UP`)
 - [ ] Cap pixel ratio (`Math.min(devicePixelRatio, 2)`) and decide on antialiasing
 - [ ] Take `dist/` out of git
 - [ ] Decide D6 (R3F now or later)
