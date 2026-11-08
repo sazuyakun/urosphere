@@ -4,6 +4,8 @@ The decided look, world, camera and light. Decided 2026-11-08: the owner loved H
 
 **One line:** a warm golden-hour island drawn like an anime film. Semi-realistic characters, flat cel colours with soft shadow edges, ink outlines, and a free camera you steer yourself, like Genshin.
 
+**Cozy everywhere:** not just the 3D world. The cursor, loading screen, menus, buttons and sounds all share the same warm, soft, cute style. Nothing should feel like a default browser or engine element.
+
 **Main references:** **Haven** (characters, colour, the couple), **Genshin Impact** (cel shading on semi-realistic characters, rim light, open-world camera), **Sable** (ink lines and flat colour carrying a whole world), **Guilty Gear Xrd** (how to make 3D read as 2D). Full list in `docs/REFERENCES.md`.
 
 ---

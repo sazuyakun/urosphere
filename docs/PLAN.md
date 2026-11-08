@@ -161,6 +161,7 @@ Built to `docs/ART_DIRECTION.md`. Each step measured.
 
 ### Later, maybe
 
+- Cozy custom cursor, shown whenever the game hasn't captured the mouse (menus, before clicking in, after `Esc`)
 - Phones and tablets (touch controls)
 - Controller support
 - WebGPU renderer
