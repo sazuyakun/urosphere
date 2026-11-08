@@ -91,7 +91,7 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 - [x] Opposite keys no longer cancel, window resize handled
 - [x] Commit the "animation clips by name" change in `Character.ts`
 - [x] **Performance baseline:** dev-only overlay (`PerfStats`) with fps, worst frame, CPU ms, draw calls, triangles, GPU objects and heap
-- [ ] Import loaders from their own files instead of `Addons.js`, so the build stops bundling Draco and Basis decoders we don't use
+- [x] Import addons from their own files instead of `Addons.js`. The build stops emitting unused Draco/Basis decoders (output 2.7 MB → 0.86 MB). The download is unchanged at 232 kB gzip (three.js + React), since tree-shaking already dropped the unused code
 - [x] Remove per-frame allocations in `Character.update` (scratch vectors, shared `UP`)
 - [ ] Cap pixel ratio (`Math.min(devicePixelRatio, 2)`) and decide on antialiasing
 - [ ] Take `dist/` out of git

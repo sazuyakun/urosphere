@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { GLTFLoader, type GLTF } from "three/examples/jsm/Addons.js";
+import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
 import type { Input } from "./Input";
 
 type ActionName = "idle" | "walk" | "sprint";
