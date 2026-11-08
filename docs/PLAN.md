@@ -65,7 +65,7 @@ Each row is something we must decide. "Leaning" is my recommendation; nothing is
 | --- | --- | --- | --- | --- |
 | D1 | World shape | Small open world (flat) / tiny planet | A flat island about 250 m across, surrounded by sea. New places later are new islands or realms | Decided |
 | D2 | Art style | Chunky cute / soft toon / painterly / watercolor filter / anime cel | Anime cel with semi-realistic characters: 2-tone cel shading with tinted shadows, ink outlines on characters and hero props, rim light, flat colour, no tone mapping (Haven + Genshin + Sable) | Decided |
-| D3 | 3D assets | Claude + Blender MCP / AI generators / hand-made / commissioned | Our own models, no free packs. Characters commissioned from an artist; props and world made with Claude + Blender MCP. Placeholder character until then | Decided |
+| D3 | 3D assets | Claude + Blender MCP / AI generators / hand-made / commissioned | Our own models, no free packs. World and props made with Claude + Blender MCP. Characters: try Claude + Blender MCP first, commission an artist if it can't reach the quality. Placeholder character until then | Decided |
 | D4 | Asset format | glTF + Meshopt/Draco + KTX2 textures | glTF compressed with `gltf-transform`, KTX2 textures once we have more than a few | Open |
 | D5 | Renderer | `WebGLRenderer` / `WebGPURenderer` | Stay on WebGL2 until we hit a limit. Revisit WebGPU later | Open |
 | D6 | React Three Fiber | Move to R3F / stay imperative | Ported before the world grows. Components compose the scene, plain classes run per-frame logic from `useFrame`, nothing per-frame goes through React state. Costs +97 kB gzip because R3F bundles all of three.js | Decided |
@@ -118,7 +118,7 @@ Built to `docs/ART_DIRECTION.md`. Each step measured.
 - [ ] Instanced grass and flowers with wind sway
 - [ ] Simple collision with props, camera pulls in front of big objects
 - [ ] Loading screen while assets download
-- [ ] Commission the two characters (in parallel, whenever ready)
+- [ ] The two characters: try Claude + Blender MCP first, commission if needed (in parallel, whenever ready)
 
 ### Phase 2: Things to do, solo
 

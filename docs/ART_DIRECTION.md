@@ -93,8 +93,8 @@ Starting palette (tuned in the browser):
 ## 5. Characters: the two of you
 
 - **Style:** semi-realistic anime proportions, about 6.5–7 heads tall, like Haven's Yu and Kay. Not chibi, not blocky.
-- **Made by:** a commissioned artist. This is the one place where quality matters most and AI tools are weakest. They can be designed to look like you two.
-- **Brief for the artist:**
+- **Made by:** first an attempt with Claude + Blender MCP, since recent AI-built games show it can now do far more than simple props (see "Newer evidence" in `docs/REFERENCES.md`). If the result doesn't reach semi-realistic anime quality, we commission an artist. Either way they can be designed to look like you two. Characters are where quality matters most, so the bar is high.
+- **Brief (for Claude or an artist):**
   - 15–25k triangles each, one 2048 px texture, mostly flat colour areas, a separate face material
   - Smooth normals suitable for inverted-hull outlines, no normal maps
   - Humanoid rig on a standard (Mixamo-compatible) skeleton, so animations can be shared and added later
@@ -115,6 +115,8 @@ Starting palette (tuned in the browser):
   - Repeated things (flowers, grass, rocks, fence posts) are instanced: one draw call for all of them
   - Exported as glTF and compressed before going into `public/`
 - **First test:** one tree and one rock, checked against these rules and measured.
+- **Proof it works:** *I Just Wanted to Fish*, a cozy game whose assets were all made by Claude Opus 5.5 through Blender MCP in two weeks.
+- **Working tip** (from Nightshoal): use a separate Claude session per modelling task, with the effort level matched to how hard it is.
 
 ---
 

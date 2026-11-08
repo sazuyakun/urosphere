@@ -142,7 +142,20 @@ Honest state of the tools, late 2026:
 | **Modelling by hand in Blender** | Full control, exactly your style, a great skill to learn | Slow at first. Characters, rigging and animation are the hardest part |
 | **Commissioning an artist** for the two characters | The highest quality, and they could actually look like you two. Delivered rigged and animated | Costs money. You rely on someone else's timeline |
 
-**My suggestion:**
+### Newer evidence (videos the owner shared, autumn 2026)
+
+The reviews above are mostly from earlier model versions. Two recent videos from the Stefan 3D AI channel show a big jump. The channel sells courses and uses affiliate links (Tripo, Higgsfield), so treat its enthusiasm with some care. The games themselves are real and playable.
+
+- **[This Game Was Built Only With AI in 11 Weeks](https://www.youtube.com/watch?v=6a5VLKPlJRo)** (Oct 2026), reviewing viewers' AI-built games:
+  - **I Just Wanted to Fish** ([Steam](https://store.steampowered.com/app/5350560/I_Just_Wanted_to_Fish/)) is a cozy fishing game with a lovely calm atmosphere. One developer, two weeks, **Claude Opus 5.5 + Blender MCP only: no AI image or 3D generators.** Claude built every asset in Blender. This is the closest proof for our plan.
+  - **Emberfall**: an HD pixel-art diorama RPG in the browser where every asset is drawn by code. The first version took under a day, and the build was 3.5 MB.
+  - **Nightshoal** ([itch.io](https://profactor.itch.io/nightshoal)) was made in 11 weeks with Claude in Godot. **Tripo for complex models, procedural code for simple ones.** The developer used separate Claude sessions per task, with the effort level matched to how hard each task was, to keep cost down.
+  - The reviewer makes ~90% of his own game's models with Tripo, using its "smart UV" output to recolour textures quickly (e.g. team colour variants).
+- **[New Absolute King of 3D & Blender - GPT-6 Astra](https://www.youtube.com/watch?v=8MUk-tQTiwE)** (Sep 2026): GPT-6 driving Blender through the Higgsfield plugin (Codex CLI + Higgsfield MCP). It builds environments, rebuilds scenes from a reference image, assembles a car from blueprints, and **rigs and animates a four-legged character**. The reviewer shows the failures too.
+
+**What this changes for us:** Claude + Blender MCP can now plausibly make the *whole* world, not just simple props. AI rigging and animation is becoming real. It's worth **trying the characters with Claude + Blender MCP first**, and commissioning only if they can't reach semi-realistic anime quality. A hybrid (generator for the hardest models, code for the rest) is a proven fallback.
+
+**My suggestion (updated):**
 
 - **World and props:** Claude + Blender MCP, made from code with a shared look (one palette texture, rounded shapes, strict triangle limits). This is where it's strong, and simple shapes suit style A + B.
 - **The two characters:** the one place where quality matters most and AI is weakest. Either commission them, or generate a base from a drawing of the two of you with an AI generator, then clean it up, rig it and animate it in Blender.
