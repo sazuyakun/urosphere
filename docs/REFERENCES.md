@@ -1,6 +1,8 @@
 # Urosphere references (Phase 1 discussion)
 
-A reference board for deciding how the world looks, feels and is viewed. Go through each section, ideally together, and note what you love and what you don't. "I love the light in X but the camera in Y" is exactly the kind of answer we need.
+A reference board for deciding how the world looks, feels and is viewed.
+
+> **Decided 2026-11-08:** anime cel shading with ink outlines, semi-realistic characters, a golden-hour island and an assisted follow camera. The decisions live in `docs/ART_DIRECTION.md`. This file stays as the research behind them. The "my lean" notes below are what was proposed before the owner chose Haven + anime outlines.
 
 ---
 
@@ -69,7 +71,22 @@ The styles from cheapest to render to most expensive. Every one can look premium
 | **C. Painterly / hand-painted** | Sky, Messenger, Tchia | Hand-painted textures (or Substance), soft gradients, lots of atmosphere | Medium: more and bigger textures to download and keep in memory |
 | **D. Watercolor / Ghibli filter** | [craftzdog's Ghibli shader](https://awesome.ecosyste.ms/projects/github.com%2Fcraftzdog%2Fghibli-style-shader), [Susurrus](https://tympanus.net/codrops/2026/04/24/susurrus-crafting-a-cozy-watercolor-world-with-three-js-and-shaders/) | Full-screen post-processing filters over the image | Expensive: full-screen passes at our resolution every frame |
 
-**My lean:** **A + B together.** Simple, rounded, cute shapes with soft toon lighting and a rim light on the characters, plus lots of instanced grass and flowers moving in the wind ([fluffy grass in three.js](https://tympanus.net/codrops/2025/02/04/how-to-make-the-fluffiest-grass-with-three-js/)). Cheapest per pixel, very cute, and it's the style our own models can reach (see section 5). Bits of C can come later as "looks on top".
+### 3D drawn like anime: ink outlines and flat colour (the chosen direction)
+
+Games where 3D models are rendered to look like hand-drawn anime, with black or ink outlines and flat colour instead of realistic shading:
+
+| Game | What to look at |
+| --- | --- |
+| **Haven** | The owner's favourite. Soft cel shading, bright colours, semi-realistic couple |
+| **Guilty Gear Xrd / Strive** (Arc System Works) | The famous "you can't tell it's 3D" anime look. Custom cel shaders, hand-tuned lighting per character, no normal maps. Their GDC 2015 talk explains how ([GDC Vault](https://gdcvault.com/play/1022031/GuiltyGearXrd-s-Art-Style-The), [handout PDF](https://www.ggxrd.com/Motomura_Junya_GuiltyGearXrd.pdf)). Also Dragon Ball FighterZ and Granblue Fantasy Versus from the same studio |
+| **Sable** (Shedworks) | Moebius comic style: flat colour, almost no shading, lines and fog do all the depth. A whole open world drawn this way ([Game Developer](https://www.gamedeveloper.com/marketing/how-shedworks-refined-the-art-of-sable-in-pursuit-of-readability)) |
+| **Genshin Impact, Honkai: Star Rail, Zenless Zone Zero** (HoYoverse) | Anime cel on semi-realistic characters with outlines and rim light, in a full open world. The closest to our characters |
+| **Hi-Fi Rush** | Bold cartoon outlines and flat colour, very clean |
+| **Jet Set Radio** | The game that started cel shading with black outlines |
+| **Ni no Kuni** | Studio Ghibli look in 3D, soft cel with gentle outlines |
+| **Zelda: The Wind Waker** | Cartoon cel shading, cute rather than anime |
+
+**My lean (before the decision):** **A + B together.** Simple, rounded, cute shapes with soft toon lighting and a rim light on the characters, plus lots of instanced grass and flowers moving in the wind ([fluffy grass in three.js](https://tympanus.net/codrops/2025/02/04/how-to-make-the-fluffiest-grass-with-three-js/)). Cheapest per pixel, very cute, and it's the style our own models can reach (see section 5). Bits of C can come later as "looks on top".
 
 **Question for you two:** which screenshots make you say "that one"? Characters especially, since the characters set the style for everything else.
 
