@@ -50,7 +50,7 @@ These change real decisions below, so answer them whenever you can:
 
 1. **Devices.** What computers do you and she use? (The weaker one sets the performance target.) Will she ever play on a phone or tablet?
 2. **Distance.** Where are the two of you, roughly? This picks where the server lives.
-3. **The place.** What should the world feel like? A small island, a forest clearing, a beach at sunset, a tiny planet you walk around (fits the name "Urosphere")?
+3. **The place.** Partly answered (2026-11-08): cozy and cute, one fixed time of day, a small open world that can grow. The exact setting is still open. See `docs/REFERENCES.md`.
 4. **Voice.** Do you want built-in voice chat, or will you be on a call anyway?
 5. **What you do together.** Sit together, plant things, leave notes for each other, small games, take photos? Pick the 2 or 3 that matter most.
 
@@ -62,9 +62,9 @@ Each row is something we must decide. "Leaning" is my recommendation; nothing is
 
 | # | Topic | Options | Leaning | Status |
 | --- | --- | --- | --- | --- |
-| D1 | World shape | Flat island / tiny planet | Flat island first. A planet needs spherical movement and a new camera, which is a big rewrite of `Character` and `World` | Open |
-| D2 | Art style | Low-poly stylized / realistic | Low-poly stylized, matching the Kenney character. Cheap to render and looks good with nice light and colour | Open |
-| D3 | 3D assets | Kenney, Quaternius, Poly Pizza (all CC0), custom in Blender | CC0 packs first, custom pieces later | Open |
+| D1 | World shape | Small open world (flat) / tiny planet | Owner wants a small open world that can grow. Flat is simpler and grows more easily; a planet (like Messenger) needs spherical movement and a new camera | Open |
+| D2 | Art style | Chunky cute / soft toon / painterly / watercolor filter | Stylized and animated-looking, better than the current blocky character, not realistic. Lean: chunky cute shapes + soft toon shading (cheapest per pixel). Pick from references | Open |
+| D3 | 3D assets | Claude + Blender MCP / AI generators / hand-made / commissioned | Our own models, no free packs (owner, 2026-11-08). Lean: props built with Claude + Blender MCP; characters commissioned or AI base + cleanup. Test one prop first | Open |
 | D4 | Asset format | glTF + Meshopt/Draco + KTX2 textures | glTF compressed with `gltf-transform`, KTX2 textures once we have more than a few | Open |
 | D5 | Renderer | `WebGLRenderer` / `WebGPURenderer` | Stay on WebGL2 until we hit a limit. Revisit WebGPU later | Open |
 | D6 | React Three Fiber | Move to R3F / stay imperative | Ported before the world grows. Components compose the scene, plain classes run per-frame logic from `useFrame`, nothing per-frame goes through React state. Costs +97 kB gzip because R3F bundles all of three.js | Decided |
@@ -76,6 +76,8 @@ Each row is something we must decide. "Leaning" is my recommendation; nothing is
 | D12 | Access | Secret link / password / login | Secret room link + a shared passphrase. Only two people | Open |
 | D13 | Desktop app | Tauri / Electron | Tauri (small download, uses the system webview). Electron if rendering differs too much between Mac and Windows | Open |
 | D14 | Project layout | Single app / pnpm workspace (`web`, `server`, `shared`) | Workspace, but only when the server starts (Phase 3) | Open |
+| D15 | Camera | Free orbit (AAA) / assisted follow / fixed angle | Lean: assisted follow that swings behind you, with free orbit on drag. Depends on trackpad vs mouse vs controller | Open |
+| D16 | Light and colour | Golden hour / bright day / pastel dawn | One fixed time of day (owner). Lean: warm golden afternoon, fog, gradient sky, one following shadow, no post-processing at first | Open |
 
 ---
 
@@ -151,8 +153,10 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 
 ### Later, maybe
 
+- Day and night cycle, where you can both go to sleep to skip to morning instead of waiting (owner idea)
+- More places to explore ("realms") as the world grows
+
 - Voice chat (WebRTC audio)
-- Day and night cycle
 - Phones and tablets (touch controls)
 - WebGPU renderer
 - Photo mode
