@@ -90,7 +90,8 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 - [x] React with imperative three.js
 - [x] Opposite keys no longer cancel, window resize handled
 - [ ] Commit the "animation clips by name" change in `Character.ts`
-- [ ] **Performance baseline:** a dev-only stats overlay (fps, frame ms, draw calls, triangles from `renderer.info`). three.js ships `stats.module.js` in its addons, so no new dependency
+- [x] **Performance baseline:** dev-only overlay (`PerfStats`) with fps, worst frame, CPU ms, draw calls, triangles, GPU objects and heap
+- [ ] Import loaders from their own files instead of `Addons.js`, so the build stops bundling Draco and Basis decoders we don't use
 - [ ] Remove per-frame allocations in `Character.update` (scratch vectors, shared `UP`)
 - [ ] Cap pixel ratio (`Math.min(devicePixelRatio, 2)`) and decide on antialiasing
 - [ ] Take `dist/` out of git
@@ -196,7 +197,15 @@ Rough size: a binary `move` is about 20 bytes. At 20 per second that's 400 bytes
 
 ---
 
-## 6. Definition of done for any step
+## 6. Measurements log
+
+| Date | Step | fps | Worst frame | CPU avg / worst | Calls | Tris | Heap | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-11-08 | Baseline (character + grid) | 60 | 18 ms | 0.2 / 0.8 ms | 8 | 72 | 56 MB | Dev build, Mac, sprinting |
+
+---
+
+## 7. Definition of done for any step
 
 - `pnpm exec tsc` passes
 - Played in the browser: movement check from section 1 plus the new feature
