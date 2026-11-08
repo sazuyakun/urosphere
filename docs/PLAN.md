@@ -93,7 +93,7 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 - [x] **Performance baseline:** dev-only overlay (`PerfStats`) with fps, worst frame, CPU ms, draw calls, triangles, GPU objects and heap
 - [x] Import addons from their own files instead of `Addons.js`. The build stops emitting unused Draco/Basis decoders (output 2.7 MB → 0.86 MB). The download is unchanged at 232 kB gzip (three.js + React), since tree-shaking already dropped the unused code
 - [x] Remove per-frame allocations in `Character.update` (scratch vectors, shared `UP`)
-- [ ] Cap pixel ratio (`Math.min(devicePixelRatio, 2)`) and decide on antialiasing
+- [x] Pixel ratio and antialiasing: retina renders at 1.5× without AA, normal screens at 1× with MSAA (see the measurements log)
 - [ ] Take `dist/` out of git
 - [ ] Decide D6 (R3F now or later)
 
@@ -202,6 +202,16 @@ Rough size: a binary `move` is about 20 bytes. At 20 per second that's 400 bytes
 | Date | Step | fps | Worst frame | CPU avg / worst | Calls | Tris | Heap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026-11-08 | Baseline (character + grid) | 60 | 18 ms | 0.2 / 0.8 ms | 8 | 72 | 56 MB | Dev build, Mac, sprinting |
+
+**Pixel ratio vs antialiasing** (2026-11-08, M1, 1440×900 window, GPU time per frame with a lit ground plane, median of 300 frames, timed to GPU finish so absolute values are a bit high):
+
+| Pixel ratio | No AA | MSAA |
+| --- | --- | --- |
+| 1× | 1.0 ms | 1.6 ms |
+| 1.5× | 1.5 ms | 3.7 ms |
+| 2× | 2.5 ms | 5.6 ms |
+
+Chosen: 1.5× without AA on retina, 1× with MSAA on normal screens. Both cost about 1.5 ms. Raise toward 2× later only if the full world leaves room.
 
 ---
 
