@@ -34,10 +34,16 @@ export class Character {
     this.mixer = new THREE.AnimationMixer(this.model);
 
     this.actions = {
-      idle: this.mixer.clipAction(this.animations[1]),
-      walk: this.mixer.clipAction(this.animations[2]),
-      sprint: this.mixer.clipAction(this.animations[3]),
+      idle: this.mixer.clipAction(this.clip("idle")),
+      walk: this.mixer.clipAction(this.clip("walk")),
+      sprint: this.mixer.clipAction(this.clip("sprint")),
     };
+  }
+
+  clip(name: string) {
+    const clip = THREE.AnimationClip.findByName(this.animations, name);
+    if (!clip) throw new Error(`Animation "${name}" not found in model`);
+    return clip;
   }
 
   playAction(action: ActionName) {
