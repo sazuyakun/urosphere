@@ -1,14 +1,10 @@
-import * as THREE from "three";
 import { PALETTE } from "./palette";
+import { SUN_DIRECTION } from "./sun";
 
-// A low golden-afternoon sun, ahead and to the right of where the camera starts,
-// so characters get a warm rim on one side. See docs/ART_DIRECTION.md section 4.
-const SUN_ELEVATION = THREE.MathUtils.degToRad(25);
-const SUN_AZIMUTH = THREE.MathUtils.degToRad(150);
+// A directional light only uses its direction, so the distance just needs to be
+// positive. It will matter once the shadow camera follows the player.
 const SUN_DISTANCE = 50;
-const SUN_POSITION = new THREE.Vector3()
-  .setFromSphericalCoords(SUN_DISTANCE, Math.PI / 2 - SUN_ELEVATION, SUN_AZIMUTH)
-  .toArray();
+const SUN_POSITION = SUN_DIRECTION.clone().multiplyScalar(SUN_DISTANCE).toArray();
 
 // three.js divides diffuse light by pi. These are tuned so a sunlit upward
 // surface ends up about 1.15/1.05/0.96 times its own colour: brighter than its

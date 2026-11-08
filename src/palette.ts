@@ -3,5 +3,7 @@
 export const PALETTE = {
   sunlight: "#ffe4c2",
   skyTop: "#9cc4ec",
+  skyHorizon: "#ffd2b0",
+  sunGlow: "#fff1d6",
   grass: "#9cc46a",
 } as const;
