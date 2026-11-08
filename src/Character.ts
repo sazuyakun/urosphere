@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import type { GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
 import type { Input } from "./Input";
+import { shortestAngleDelta } from "./angles";
 
 type ActionName = "idle" | "walk" | "sprint";
 
@@ -62,19 +63,15 @@ export class Character {
     nextAction.play();
   }
 
-  shortestAngleDelta(from: number, to: number) {
-    return Math.atan2(Math.sin(to - from), Math.cos(to - from));
-  }
-
-  // Returns how far the character moved this frame. The vector is reused next
-  // frame, so read it right away and don't keep a reference to it.
-  update(delta: number, input: Input, azimuthAngle: number) {
-    const direction = this.direction.copy(input.direction).normalize().applyAxisAngle(UP, azimuthAngle);
+  // Movement is relative to the camera: cameraYaw turns the input so W always
+  // walks away from the camera.
+  update(delta: number, input: Input, cameraYaw: number) {
+    const direction = this.direction.copy(input.direction).normalize().applyAxisAngle(UP, cameraYaw);
 
     if (direction.x !== 0 || direction.z !== 0) {
       this.angle = Math.atan2(direction.x, direction.z);
     }
-    const delta_ = this.shortestAngleDelta(this.model.rotation.y, this.angle);
+    const delta_ = shortestAngleDelta(this.model.rotation.y, this.angle);
     const targetRotation = this.model.rotation.y + delta_;
 
     this.model.rotation.y = THREE.MathUtils.damp(
@@ -99,6 +96,5 @@ export class Character {
     }
 
     this.mixer.update(delta);
-    return this.movedBy
   }
 }

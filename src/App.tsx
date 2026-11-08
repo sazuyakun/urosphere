@@ -27,7 +27,7 @@ export function App() {
       // cheapest "basic" type left visible stair steps, because the low sun
       // stretches each shadow pixel about 2.4x along the ground.
       shadows="percentage"
-      camera={{ fov: 75, near: 0.1, far: CAMERA_FAR, position: [0, 3, 5] }}
+      camera={{ fov: 60, near: 0.1, far: CAMERA_FAR, position: [0, 3, 5] }}
     >
       <Sky />
       <Lighting />
