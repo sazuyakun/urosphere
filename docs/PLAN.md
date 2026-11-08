@@ -67,7 +67,7 @@ Each row is something we must decide. "Leaning" is my recommendation; nothing is
 | D3 | 3D assets | Kenney, Quaternius, Poly Pizza (all CC0), custom in Blender | CC0 packs first, custom pieces later | Open |
 | D4 | Asset format | glTF + Meshopt/Draco + KTX2 textures | glTF compressed with `gltf-transform`, KTX2 textures once we have more than a few | Open |
 | D5 | Renderer | `WebGLRenderer` / `WebGPURenderer` | Stay on WebGL2 until we hit a limit. Revisit WebGPU later | Open |
-| D6 | React Three Fiber | Move to R3F / stay imperative | Roadmap says R3F after step 3. Do it **before** the world grows, so we don't port twice. Rule: nothing per-frame goes through React state | Open |
+| D6 | React Three Fiber | Move to R3F / stay imperative | Ported before the world grows. Components compose the scene, plain classes run per-frame logic from `useFrame`, nothing per-frame goes through React state. Costs +97 kB gzip because R3F bundles all of three.js | Decided |
 | D7 | Physics / collision | Hand-rolled / Rapier (WASM) | Hand-rolled ground height + simple colliders first. Rapier only if we need real physics | Open |
 | D8 | Network model | Server relay / peer-to-peer WebRTC / lockstep | Server relay over WebSocket (see section 5) | Open |
 | D9 | Server host | Cloudflare Durable Objects / Fly.io / a VPS | Cloudflare Durable Objects: one object = our room, holds world state, sleeps when no one's on | Open |
@@ -95,7 +95,7 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 - [x] Remove per-frame allocations in `Character.update` (scratch vectors, shared `UP`)
 - [x] Pixel ratio and antialiasing: retina renders at 1.5× without AA, normal screens at 1× with MSAA (see the measurements log)
 - [x] Take `dist/` out of git
-- [ ] Decide D6 (R3F now or later)
+- [x] Decide D6 and port to React Three Fiber (no drei yet)
 
 ### Phase 1: A beautiful place, solo
 
@@ -202,6 +202,7 @@ Rough size: a binary `move` is about 20 bytes. At 20 per second that's 400 bytes
 | Date | Step | fps | Worst frame | CPU avg / worst | Calls | Tris | Heap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026-11-08 | Baseline (character + grid) | 60 | 18 ms | 0.2 / 0.8 ms | 8 | 72 | 56 MB | Dev build, Mac, sprinting |
+| 2026-11-08 | React Three Fiber port | 60 | 18 ms | 0.25 / 0.5 ms | 7 | 72 | 28 MB | Sprinting. GPU 1.0–1.2 ms at 985×1440 (1.5×). Bundle 232 → 329 kB gzip |
 
 **Pixel ratio vs antialiasing** (2026-11-08, M1, 1440×900 window, GPU time per frame with a lit ground plane, median of 300 frames, timed to GPU finish so absolute values are a bit high):
 
