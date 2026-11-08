@@ -58,9 +58,9 @@ Chosen by the owner on 2026-11-08 over the assisted follow camera. You steer the
 | Pitch | 15° looking down by default, limited to between 10° looking up and 70° looking down |
 | Field of view | 60° (75° today is wide and stretches the edges) |
 | Auto-follow | None. The camera never swings by itself |
-| Recenter | One key snaps the camera behind the character, like Zelda's target button (key chosen when we build it) |
-| Mouse sensitivity | A setting, because trackpads and mice feel very different |
-| Never clips | Stays above the ground and pulls in front of big objects (trees, cottage, cliff) between it and you. More important with free orbit, since you can swing it into anything |
+| Recenter | `C` swings the camera back behind the character (about a quarter second), like Zelda's target button |
+| Mouse sensitivity | `MOUSE_SENSITIVITY` on the camera class for now (0.0025 rad per pixel). Becomes a player setting with the settings menu, because trackpads and mice feel very different |
+| Never clips | Stays at least 0.3 m above the ground (done). Pulling in front of big objects (trees, cottage, cliff) comes with the collision step. More important with free orbit, since you can swing it into anything |
 | Far plane | About 300 m. Fog hides everything before that, so the far edge is never drawn |
 | Later | Controller (right stick), touch on phones |
 
