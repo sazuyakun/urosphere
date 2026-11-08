@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { Input } from "./Input";
 import { World } from "./World";
 import { Character } from "./Character";
+import { PerfStats } from "./PerfStats";
 
 export function App() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -10,6 +11,7 @@ export function App() {
   useEffect(() => {
     const input = new Input();
     const world = new World(containerRef.current!);
+    const stats = import.meta.env.DEV ? new PerfStats(containerRef.current!, world.renderer) : null;
     const timer = new THREE.Timer();
     let disposed = false;
 
@@ -17,6 +19,7 @@ export function App() {
       if (disposed) return;
 
       world.renderer.setAnimationLoop(() => {
+        stats?.begin();
         timer.update();
         const delta = timer.getDelta();
 
@@ -24,11 +27,13 @@ export function App() {
         world.follow(movedBy);
 
         world.render();
+        stats?.end();
       });
     });
 
     return () => {
       disposed = true;
+      stats?.dispose();
       input.dispose();
       world.dispose();
     };
