@@ -94,7 +94,7 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 - [x] Import addons from their own files instead of `Addons.js`. The build stops emitting unused Draco/Basis decoders (output 2.7 MB → 0.86 MB). The download is unchanged at 232 kB gzip (three.js + React), since tree-shaking already dropped the unused code
 - [x] Remove per-frame allocations in `Character.update` (scratch vectors, shared `UP`)
 - [x] Pixel ratio and antialiasing: retina renders at 1.5× without AA, normal screens at 1× with MSAA (see the measurements log)
-- [ ] Take `dist/` out of git
+- [x] Take `dist/` out of git
 - [ ] Decide D6 (R3F now or later)
 
 ### Phase 1: A beautiful place, solo
