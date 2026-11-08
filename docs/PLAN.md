@@ -105,7 +105,7 @@ Phases are in order. Each phase is a list of small steps, and each step is one o
 
 Built to `docs/ART_DIRECTION.md`. Each step measured.
 
-- [ ] Ground plane + sun and hemisphere light, first cel (toon) material with a gradient ramp
+- [x] Ground plane + sun and sky light, first cel (toon) material with a shared gradient ramp
 - [ ] Gradient sky dome + distance fog, camera far plane trimmed to match
 - [ ] Shadows: one crisp directional shadow that follows the player
 - [ ] Free orbit camera: pointer-lock mouse look, distance, pitch limits, zoom, recenter key, sensitivity, 60° field of view
@@ -212,6 +212,7 @@ Rough size: a binary `move` is about 20 bytes. At 20 per second that's 400 bytes
 | Date | Step | fps | Worst frame | CPU avg / worst | Calls | Tris | Heap | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026-11-08 | Baseline (character + grid) | 60 | 18 ms | 0.2 / 0.8 ms | 8 | 72 | 56 MB | Dev build, Mac, sprinting |
+| 2026-11-08 | Ground, sun, sky light, cel material | 60 | 18 ms | 0.4 / 1.0 ms | 8 | 74 | 27 MB | GPU 0.4 ms at 985×1440 (1.5×). Lit grass measured `#a7c969` (predicted `#a6c966`) |
 | 2026-11-08 | React Three Fiber port | 60 | 18 ms | 0.25 / 0.5 ms | 7 | 72 | 28 MB | Sprinting. GPU 1.0–1.2 ms at 985×1440 (1.5×). Bundle 232 → 329 kB gzip |
 
 **Pixel ratio vs antialiasing** (2026-11-08, M1, 1440×900 window, GPU time per frame with a lit ground plane, median of 300 frames, timed to GPU finish so absolute values are a bit high):

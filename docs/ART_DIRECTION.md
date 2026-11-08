@@ -75,7 +75,7 @@ One fixed time of day.
 | Element | Setting |
 | --- | --- |
 | Sun | Low and warm, about 25° above the horizon. Peach-gold light |
-| Sky light | Hemisphere light: pale blue from above, warm bounce from below |
+| Sky light | Flat ambient light in the sky colour. Not a hemisphere light: that shades smoothly by surface direction and blurs the two cel tones into a gradient (found in Phase 1). Flat ambient keeps every shadow one even, blue-tinted colour |
 | Shadows | One directional shadow map, 2048 px, covering about 60 m around the player and following them. **Crisp edges** (cel style, and cheaper than soft filtering) |
 | Sky | Gradient dome, warm peach at the horizon to soft blue overhead, with a glow around the sun |
 | Fog | Distance fog in the horizon colour, starting around 60 m, solid by 250 m |
@@ -85,11 +85,11 @@ Starting palette (tuned in the browser):
 
 | Token | Colour | Use |
 | --- | --- | --- |
-| `sunlight` | `#ffd9a8` | Sun colour |
+| `sunlight` | `#ffe4c2` | Sun colour (was `#ffd9a8`, which turned green grass olive) |
 | `shadowTint` | `#7a74b8` | What shadows lean towards |
 | `skyTop` | `#9cc4ec` | Sky overhead |
 | `skyHorizon` | `#ffd2b0` | Horizon and fog |
-| `grass` | `#9cc46a` | Meadow base |
+| `grass` | `#9cc46a` | Meadow base. Shows as about `#a7c969` in sunlight |
 | `ink` | `#2b2233` | Outline base (mixed with the surface colour) |
 
 ---
