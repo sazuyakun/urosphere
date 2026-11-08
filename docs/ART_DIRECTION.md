@@ -24,7 +24,7 @@ The decided look, world, camera and light. Decided 2026-11-08: the owner loved H
 
 How it's built (Phase 1 steps):
 
-- Start with three.js `MeshToonMaterial` + a 3-pixel gradient ramp texture, then move to one shared custom toon shader once we need tinted shadows and rim light in the same material.
+- three.js `MeshToonMaterial` + a shared gradient ramp (`TOON_GRADIENT`) whose shadow side gets zero sunlight. Tinted shadows come from the lavender fill light. Move to one shared custom toon shader when we add the rim light.
 - Outlines with the **inverted hull** method: a second, slightly bigger copy of the mesh drawn back-faces only in ink colour. Costs 1 extra draw per outlined mesh, so it's fine for 2 characters and a handful of hero props. A full-screen edge-detection pass is the alternative if we ever want everything outlined; measure first.
 - Models need smooth (averaged) normals for clean hull outlines. This goes in the model rules below.
 
@@ -75,8 +75,8 @@ One fixed time of day.
 | Element | Setting |
 | --- | --- |
 | Sun | Low and warm, about 25° above the horizon. Peach-gold light |
-| Sky light | Flat ambient light in the sky colour. Not a hemisphere light: that shades smoothly by surface direction and blurs the two cel tones into a gradient (found in Phase 1). Flat ambient keeps every shadow one even, blue-tinted colour |
-| Shadows | One directional shadow map, 2048 px, covering about 60 m around the player and following them. **Crisp edges** (cel style, and cheaper than soft filtering) |
+| Shadow fill | Flat ambient light in a pale lavender (`shadowFill`). It's the only light that reaches shadows, so every shadow (a surface turned away from the sun or one in another object's shadow) is the same cool tint, about 60% as bright. The toon ramp's shadow side gets zero sunlight to match cast shadows, which remove all sunlight. The fill is ambient, not a hemisphere light: Not a hemisphere light: that shades smoothly by surface direction and blurs the two cel tones into a gradient (found in Phase 1). Flat ambient keeps every shadow one even, blue-tinted colour |
+| Shadows | One directional shadow map, 2048 px, covering about 60 m around where the camera looks, following it and snapped to whole shadow pixels so edges don't shimmer. **Crisp edges with PCF filtering**: the cheapest "basic" type showed stair steps, because the low sun stretches each shadow pixel about 2.4x along the ground |
 | Sky | Gradient dome, warm peach at the horizon to soft blue overhead, a stylized sun disc with a soft glow, in the same direction as the sunlight. Infinitely far away and drawn after the world, so only visible sky pixels cost anything |
 | Fog | Distance fog in the horizon colour, starting around 60 m, solid by 250 m |
 | Post-processing | None in Phase 1 |
@@ -85,12 +85,12 @@ Starting palette (tuned in the browser):
 
 | Token | Colour | Use |
 | --- | --- | --- |
-| `sunlight` | `#ffe4c2` | Sun colour (was `#ffd9a8`, which turned green grass olive) |
-| `shadowTint` | `#7a74b8` | What shadows lean towards |
+| `sunlight` | `#ffe593` | Sun colour, intensity 1.73 (earlier `#ffd9a8` turned grass olive; `#ffe4c2` was used before shadows) |
+| `shadowFill` | `#e1e5ff` | Ambient fill, intensity 2.51: the only light in shadows, giving the lavender tint |
 | `skyTop` | `#9cc4ec` | Sky overhead |
 | `skyHorizon` | `#ffd2b0` | Horizon and fog (must stay identical so the ground melts into the sky) |
 | `sunGlow` | `#fff1d6` | Sun disc and the glow around it |
-| `grass` | `#9cc46a` | Meadow base. Shows as about `#a7c969` in sunlight |
+| `grass` | `#9cc46a` | Meadow base. Shows as `#a6c968` in sunlight and `#7c9f5f` in shadow (measured) |
 | `ink` | `#2b2233` | Outline base (mixed with the surface colour) |
 
 ---
