@@ -9,7 +9,11 @@ export class Input {
     this.direction = new THREE.Vector3();
     this.sprinting = false;
     this.pressed = new Set();
+  }
 
+  // Listeners are attached separately from construction so React StrictMode can
+  // disconnect and reconnect the same instance.
+  connect() {
     document.addEventListener("keydown", this.onKeyDown)
     document.addEventListener("keyup", this.onKeyUp)
     window.addEventListener("blur", this.onBlur)
@@ -22,10 +26,11 @@ export class Input {
     this.update()
   }
 
-  dispose() {
+  disconnect() {
     document.removeEventListener("keydown", this.onKeyDown)
     document.removeEventListener("keyup", this.onKeyUp)
     window.removeEventListener("blur", this.onBlur)
+    this.onBlur()
   }
 
   onKey(code: string, pressed: boolean) {

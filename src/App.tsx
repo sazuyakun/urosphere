@@ -10,6 +10,7 @@ export function App() {
 
   useEffect(() => {
     const input = new Input();
+    input.connect();
     const world = new World(containerRef.current!);
     const stats = import.meta.env.DEV ? new PerfStats(containerRef.current!, world.renderer) : null;
     const timer = new THREE.Timer();
@@ -34,7 +35,7 @@ export function App() {
     return () => {
       disposed = true;
       stats?.dispose();
-      input.dispose();
+      input.disconnect();
       world.dispose();
     };
   }, []);
